@@ -1,0 +1,118 @@
+%\documentclass[aspectratio=34]{beamer}
+\documentclass{beamer}
+
+% Remove the gratuituous footer
+\setbeamertemplate{footline}{}
+\setbeamertemplate{navigation symbols}{}
+%\renewcommand{\insertnavigation}[1]{}
+
+\usepackage{rotating}
+\usepackage{subfigure}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{xcolor}
+
+\usepackage{graphicx}
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\st}{s.t.}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ne}{Ne}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\vvec}{vec}
+
+
+%\usepackage{beamerthemesplit}
+
+% Make footnotes visible. Stolen from http://tex.stackexchange.com/questions/5852/beamer-footnote-text-collides-with-navigation-symbols
+\addtobeamertemplate{footnote}{\vspace{-6pt}\advance\hsize-0.5cm}{\vspace{6pt}}
+\makeatletter
+% Alternative A: footnote rule
+\renewcommand*{\footnoterule}{\kern -3pt \hrule \@width 2in \kern 8.6pt}
+% Alternative B: no footnote rule
+% \renewcommand*{\footnoterule}{\kern 6pt}
+\makeatother
+
+\setbeamertemplate{bibliography item}{}
+\usepackage[style=authoryear-comp,firstinits,doi=true,isbn=false,url=false,eprint=false,backend=biber]{biblatex}
+%\usepackage[sorting=none,firstinits,doi=false,isbn=false,url=false,backend=biber]{biblatex}
+\bibliography{/Users/kuitang/Dropbox/Library/ML}
+% Don't display series
+\AtEveryBibitem{\clearlist{series}}
+\AtEveryBibitem{\clearfield{series}}
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+       \step[fieldset=series, null]
+    }
+  }
+}
+
+\DeclareFieldFormat{titlecase}{\MakeTitleCase{#1}}
+
+% Correct casing for journal titles.
+\newrobustcmd{\MakeTitleCase}[1]{%
+  \ifthenelse{\ifcurrentfield{booktitle}\OR\ifcurrentfield{booksubtitle}%
+    \OR\ifcurrentfield{maintitle}\OR\ifcurrentfield{mainsubtitle}%
+    \OR\ifcurrentfield{journaltitle}\OR\ifcurrentfield{journalsubtitle}%
+    \OR\ifcurrentfield{issuetitle}\OR\ifcurrentfield{issuesubtitle}%
+    \OR\ifentrytype{book}\OR\ifentrytype{mvbook}\OR\ifentrytype{bookinbook}%
+    \OR\ifentrytype{booklet}\OR\ifentrytype{suppbook}%
+    \OR\ifentrytype{collection}\OR\ifentrytype{mvcollection}%
+    \OR\ifentrytype{suppcollection}\OR\ifentrytype{manual}%
+    \OR\ifentrytype{periodical}\OR\ifentrytype{suppperiodical}%
+    \OR\ifentrytype{proceedings}\OR\ifentrytype{mvproceedings}%
+    \OR\ifentrytype{reference}\OR\ifentrytype{mvreference}%
+    \OR\ifentrytype{report}\OR\ifentrytype{thesis}}
+    {#1}
+{\MakeSentenceCase{#1}}}
+
+\begin{document}
+\begin{frame}
+  \frametitle{Objective Functions}
+  Regularized log-likelihood
+  \begin{align*}
+  \max_\theta \ell(\theta;X^{(1:M)},Y^{(1:M)}) &= \sum_{m=1}^M \Big[\langle\phi(X^{(m)},Y^{(m)}),\theta\rangle\\
+  &\hspace{1cm} - \log Z(X^{(m)};\theta)\Big] - \frac{\lambda}{2}\|\theta\|^2
+  \end{align*}
+  But $Z$ is a sum over the exponentially many configurations of $Y^{(m)}$. Replace $\log Z$ with the Bethe approximation, it can be shown this is equivalent to
+  \begin{equation*}
+    \min_{\tau^{(1:M)}\in\mathcal{T}^M} \frac{1}{2\lambda}\|\theta^*(\tau^{(1:M)})\|^2 - \sum_m H_\rho(\tau^{(m)})
+  \end{equation*}
+  with $\theta^{*}$ a linear function of $\tau$ and $X, Y$.
+\end{frame}
+
+\begin{frame}
+  \frametitle{Algorithm}
+  \begin{algorithm}[H]
+      \caption{Frank-Wolfe Algorithm for MLE}
+    \begin{algorithmic}
+      \State Let $t := 0$, $\tau$ be the uniform distribution, $h(\tau)$ the objective function of the previous slide.
+      \Repeat
+        \State Compute gradient $g_t := \nabla h(\tau_t)$
+        \For{$m := 1:M$}
+          \State Find the MAP assignment for the $m$th example $$\tau_{t}^{*(m)}:=\min_{\tau^{(m)}\in{\cal M}}\left\langle g^{(m)}_t,\tau^{(m)}\right\rangle$$
+        \EndFor
+        \State Linesearch: Find $\eta^{*}$ to minimize $h((1 - \eta)\tau_t + \eta\tau_{t}^{*})$
+        \State Update $\tau_{t+1} := (1 - \eta^{*})\tau_t + \eta^{*}\tau_{t}^{*}$
+      \Until{duality gap $< \epsilon$} \Comment{Gap converges at rate $O(1/t)$}
+    \end{algorithmic}
+  \end{algorithm}
+  Inner loop can be parallel, or block-coordinate (randomly pick one sample).
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results on Linear CRFs (Test Error)}
+  \includegraphics[width=\textwidth]{../fig/horseErrCurve200.eps}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results on Linear CRFs (Objective Value)}
+  \includegraphics[width=\textwidth]{../fig/horseObjCurve200.eps}
+\end{frame}
+
+\end{document}
+
