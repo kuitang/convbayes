@@ -1,0 +1,12 @@
+I. Topic Models and Bayes Nets
+ - Big problems there
+ - steal some of Dave's slides to explain topic models and generative models simultaneously.
+
+II. Multimodal representation of images
+ - Explain word2vec, 
+ -
+ - Explain DEVISE
+ - Explain ImageNet paper, word2vec, devise.
+ - New topic model fall out as a consequence
+
+III. Related work and why are are better. [Sammer]
