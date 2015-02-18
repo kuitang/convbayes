@@ -140,6 +140,44 @@
   \frametitle{Results on Linear CRFs (Objective Value)}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Why Do We Want to Do This?}
+  \begin{itemize}
+  \item Constructing an unsupervised, non-discrimantive, model
+  \item Difficult to measure performance - (Evaluating Topic Models Citation)
+  \item Unspervised data can lead to better vector construction
+  \item "...in general capture some distributional syntatic and semantic information." (Socher paper citation)
+  \item Can this lead to a semantic understanding of multimodal data?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Related Methods}
+  \begin{itemize}
+  \item Use Deep Boltzmann Machines - (Srivastava Citation)
+  \item Semi-supervised learning for effective generalization from smaller data sets - (Kingma citation)
+  \item Deep Visual-Semantic Embedding Model, use both unannotated text and trained image data for classification - (DeViSE Citation)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Implementation and Applications}
+  \begin{itemize}
+  \item Image and text modalities: corpa with images, annotated images, images with captions
+  \item Code EM algorithm with pretrained Caffe model and custom objective, compare with performing SGD on CNN and variational parameters jointly
+  \item Explore other applications: modeling sub-topics, generalization to tangential classes, or image queries and search
+  \item Maybe other modalities such as genomics or natural language?
+  \item Compare with other algorithms
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Thank You}
+  \begin{itemize}
+  \item Questions?
+  \end{itemize}
+\end
+
 \section{References}
 \begin{frame}[t,allowframebreaks]{}
 \frametitle{References}
