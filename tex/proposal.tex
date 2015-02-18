@@ -1,5 +1,80 @@
-\documentclass{article}
+% Kui's Latex preamble for notes
+\documentclass[english]{article}
 \usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2cm,bmargin=2cm,lmargin=2cm,rmargin=2cm}
+\usepackage{color}
+\usepackage{babel}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage[unicode=true,pdfusetitle,
+ bookmarks=true,bookmarksnumbered=false,bookmarksopen=false,
+ breaklinks=false,pdfborder={0 0 1}]
+ {hyperref}
+
+ 
+\makeatletter
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% User specified LaTeX commands.
+\usepackage{pdfsync}
+\usepackage{showlabels}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\DeclareMathOperator{\conv}{conv}
+\DeclareMathOperator{\st}{s.t.}
+\DeclareMathOperator{\dom}{dom}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\Ne}{Ne}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\vvec}{vec}
+\DeclareMathOperator{\pa}{pa}
+\DeclareMathOperator{\repmat}{repmat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Biber Biblatex stuff
+\usepackage[style=trad-abbrv,natbib=true,firstinits,doi=false,isbn=false,url=false,eprint=false,backend=biber]{biblatex}
+\bibliography{ML}
+% Don't display series
+\AtEveryBibitem{\clearlist{series}}
+\AtEveryBibitem{\clearfield{series}}
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map{
+       \step[fieldset=series, null]
+    }
+  }
+}
+
+% Justify text
+\renewcommand{\raggedright}{\leftskip=0pt \rightskip=0pt plus 0cm} 
+
+\DeclareFieldFormat{titlecase}{\MakeTitleCase{#1}}
+
+% Correct casing for journal titles.
+\newrobustcmd{\MakeTitleCase}[1]{%
+  \ifthenelse{\ifcurrentfield{booktitle}\OR\ifcurrentfield{booksubtitle}%
+    \OR\ifcurrentfield{maintitle}\OR\ifcurrentfield{mainsubtitle}%
+    \OR\ifcurrentfield{journaltitle}\OR\ifcurrentfield{journalsubtitle}%
+    \OR\ifcurrentfield{issuetitle}\OR\ifcurrentfield{issuesubtitle}%
+    \OR\ifentrytype{book}\OR\ifentrytype{mvbook}\OR\ifentrytype{bookinbook}%
+    \OR\ifentrytype{booklet}\OR\ifentrytype{suppbook}%
+    \OR\ifentrytype{collection}\OR\ifentrytype{mvcollection}%
+    \OR\ifentrytype{suppcollection}\OR\ifentrytype{manual}%
+    \OR\ifentrytype{periodical}\OR\ifentrytype{suppperiodical}%
+    \OR\ifentrytype{proceedings}\OR\ifentrytype{mvproceedings}%
+    \OR\ifentrytype{reference}\OR\ifentrytype{mvreference}%
+    \OR\ifentrytype{report}\OR\ifentrytype{thesis}}
+    {#1}
+{\MakeSentenceCase{#1}}}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Graphics stuff
 
 \title{A Multimodal Topic Model of Deep Semantic Representations}
 \author{Kui Tang and Sameer Lal}
@@ -34,6 +109,9 @@ Many authors have represented images as bag of words, which has been criticized 
 
 \paragraph{Hybrid neural network and HMM models.}
 A simpler problem related to our work is to combine output from a feedforward neural network with a Hidden Markov model. Several authors have proposed schemes tuned for a variety of tasks \citet{Trentin01}. [! Sameer, can you skim this paper and write a bit more about it? !] The approach closest to ours is that of \citet{Bengio92}, which derives gradient updates to a feedforward neural network based on the maximum-likelihood objective. Our work shares the same approach to optimize the neural network parameters to maximize the likelihood of the overall probabilistic model. [! TO UNDERSTAND: If their outputs $Y_t$ change, how do they properly model that as a fixed observation in the likelihood? I think our likelihood function must be a lot of general! ]. Instead of treating neural network \emph{output} as observed data, our model is more general because we lift \emph{parameters} from the neural network into latent variables in the overarching Bayesian network. We work with intractable Bayesian networks by using VB-EM.
+
+
+\printbibliography
 
 \end{document}
 

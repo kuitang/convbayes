@@ -26,3 +26,28 @@
 *.exe
 *.out
 *.app
+
+# Figures
+#*.eps
+*.dvi
+*.ps
+
+# LaTeX
+#*.pdf
+*.aux
+*.log
+*.bbl
+*.bcf
+*.blg
+*.nav
+*.out
+*.pdf
+*.run.xml
+*.snm
+*.toc
+*.synctex.gz
+*.pdfsync
+
+# MS Windows
+Thumbs.db
+*gurobiLog
