@@ -48,6 +48,7 @@ G.add_edge("theta_d", "z_dn")
 G.add_edge("theta_d", "z_di")
 G.add_edge("z_dn", "w_dn")
 G.add_edge("z_di", "v_di")
+G.add_edge("x_di", "v_di")
 
 G.add_edge("lambda_v", "w_dn")
 G.add_edge("pi_c", "w_dn")

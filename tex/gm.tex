@@ -1,0 +1,19 @@
+\documentclass{article}
+
+\usepackage{tikz}
+\usetikzlibrary{bayesnet}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \node[const]                     (alpha)   {$\alpha$} ; %
+  \node[latent, right=of alpha]    (theta_d) {$\theta_d$} ; %
+  \node[latent, right=of theta_d]  (z_dn)    {$z_{dn}$} ; %
+  \node[latent, below=of z_dn]     (z_di)    {$z_{di}$} ; %
+  \node[latent, right=of z_di)     (v_di)    {$v_{di}$} ; %
+  \node[observed, right=of v_di]   (x_di)    {$x_{di}$} ; %
+  \node[observed, above=of v_di]   (w_dn)    {$w_{dn}$} ;
+
+\end{tikzpicture}
+
+\end{document}

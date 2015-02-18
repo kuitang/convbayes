@@ -37,7 +37,7 @@
 \makeatother
 
 \setbeamertemplate{bibliography item}{}
-\usepackage[style=authoryear-comp,firstinits,doi=true,isbn=false,url=false,eprint=false,backend=biber]{biblatex}
+\usepackage[style=authoryear-comp,natbib=true,firstinits,doi=true,isbn=false,url=false,eprint=false,backend=biber]{biblatex}
 %\usepackage[sorting=none,firstinits,doi=false,isbn=false,url=false,backend=biber]{biblatex}
 \bibliography{ML}
 % Don't display series
@@ -125,59 +125,59 @@
 \begin{frame}
   \frametitle{Gaussian Topic Models with CNNs}
   \begin{center}
-    \includegraphics[width=\textwidth]{gtm_cnn.pdf}
-    \begin{itemize}
-    \item Topics are (mixtures of) Gaussians.
-    \item Words are latent vectors $\lambda_v \in \mathbb{R}^{D_W}$ using Bayesian word2vec.
-    \item Images are latent vectors $v_{in} \in \mathbb{R}^{D_I}$ where $v_{ni} \sim \mathcal{N}(M \text{cnn}(I_{ni} ; \Omega))$ with $\Omega$ CNN parameters, $M$ mapping to word vector space, and $\text{cnn}$ feature representation output by CNN.
-    \end{itemize}
+    \includegraphics[width=0.7\textwidth]{gtm_cnn.pdf}
   \end{center}
+  {\small
+  \begin{itemize}
+  \item Topics are (mixtures of) Gaussians.
+  \item Words are latent vectors $\lambda_v \in \mathbb{R}^{D_W}$ using Bayesian word2vec.
+  \item Images are latent vectors $v_{in} \in \mathbb{R}^{D_I}$ \emph{conditioned} on raw images $x_{di}$. We have $v_{ni} \sim \mathcal{N}(M \text{CNN}_x(x_{ni} ; \Omega), \Sigma)$ with $\Omega$ CNN parameters, $M$ mapping to word vector space, and $\text{CNN}_x$ feature representation output by CNN.
+  \end{itemize}
+  \par}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Algorithm}
-  \begin{algorithm}[H]
-      \caption{Frank-Wolfe Algorithm for MLE}
-    \begin{algorithmic}
-      \State Let $t := 0$, $\tau$ be the uniform distribution, $h(\tau)$ the objective function of the previous slide.
-      \Repeat
-        \State Compute gradient $g_t := \nabla h(\tau_t)$
-        \For{$m := 1:M$}
-          \State Find the MAP assignment for the $m$th example $$\tau_{t}^{*(m)}:=\min_{\tau^{(m)}\in{\cal M}}\left\langle g^{(m)}_t,\tau^{(m)}\right\rangle$$
-        \EndFor
-        \State Linesearch: Find $\eta^{*}$ to minimize $h((1 - \eta)\tau_t + \eta\tau_{t}^{*})$
-        \State Update $\tau_{t+1} := (1 - \eta^{*})\tau_t + \eta^{*}\tau_{t}^{*}$
-      \Until{duality gap $< \epsilon$} \Comment{Gap converges at rate $O(1/t)$}
-    \end{algorithmic}
-  \end{algorithm}
-  Inner loop can be parallel, or block-coordinate (randomly pick one sample).
-\end{frame}
-
-\begin{frame}
-  \frametitle{Results on Linear CRFs (Test Error)}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Results on Linear CRFs (Objective Value)}
+  \frametitle{Variational Bayesian EM}
+  To learn latent variable models, maximize the \emph{marginal likelihood}
+  \[
+  \max_{\theta}p(\mathbf{x}|\theta)=\int p(\mathbf{x},\mathbf{z}|\theta)p(\mathbf{z}|\theta)d\mathbf{z}
+  \]
+  This integral is intractable. Approximate instead with the \emph{evidence lower bound (ELBO)}
+  \[
+  \log p(\mathbf{x}|\theta)\geq E_{q(z|\phi)}\left[\log p(\mathbf{x},\mathbf{z}|\theta)-\log q(\mathbf{z}|\theta)\right]=:{\cal L}(\theta,\phi)
+  \]
+  {\small where $q(\mathbf{z}|\phi)$ is a simple \emph{variational distribution} which approximates the posterior $p(\mathbf{z}|\mathbf{x},\theta)$. \par}
+  \textbf{Variational Bayesian EM:}
+  \begin{itemize}
+  \item E Step: Update $\phi^{(t+1)}\leftarrow\arg\max_{\phi}\mathcal{L}(\theta^{(t)},\phi)$
+  \item M Step: Update $\theta^{(t+1)}\leftarrow\arg\max_{\theta}\mathcal{L}(\theta,\phi^{(t)})$
+  \end{itemize}
+  {\small 
+    E step is variational Bayesian inference \citep{WangC13, Ranganath14}. M step is learning (updating) a CNN with objective
+    \par}
+  \[ \min_\Omega \sum_\ell L(y_\ell ; \text{CNN}_y(x_\ell ; \Omega)) + \frac{1}{2\sigma^2} \sum_{di} E_{q(v_{di}|\phi^(t))} \left[ (v_{di} - \text{CNN}_x(x_{di} ; \Omega))^2 \right] \]
 \end{frame}
 
 \begin{frame}
   \frametitle{Why Do We Want to Do This?}
   \begin{itemize}
   \item Constructing an unsupervised, non-discrimantive, model
-  \item Difficult to measure performance - (Evaluating Topic Models Citation)
+  \item Difficult to measure performance \citep{Wallach09a}
   \item Unspervised data can lead to better vector construction
-  \item "...in general capture some distributional syntatic and semantic information." (Socher paper citation)
+  \item "...in general capture some distributional syntatic and semantic information." \citep{Socher13a}
   \item Can this lead to a semantic understanding of multimodal data?
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Related Methods}
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/devise.pdf}
+  \end{center}
   \begin{itemize}
-  \item Use Deep Boltzmann Machines - (Srivastava Citation)
-  \item Semi-supervised learning for effective generalization from smaller data sets - (Kingma citation)
-  \item Deep Visual-Semantic Embedding Model, use both unannotated text and trained image data for classification - (DeViSE Citation)
+  \item Use Deep Boltzmann Machines \citep{Srivastava14}
+  \item Semi-supervised learning for effective generalization from smaller data sets \citep{Kingma14b}
+  \item Deep Visual-Semantic Embedding Model (DeViSE), use both unannotated text and trained image data for classification \citep{Frome13}
   \end{itemize}
 \end{frame}
 
@@ -186,8 +186,8 @@
   \begin{itemize}
   \item Image and text modalities: corpa with images, annotated images, images with captions
   \item Code EM algorithm with pretrained Caffe model and custom objective, compare with performing SGD on CNN and variational parameters jointly
-  \item Explore other applications: modeling sub-topics, generalization to tangential classes, or image queries and search
-  \item Maybe other modalities such as genomics or natural language?
+  \item Explore other applications: modeling sub-topics, generalization to tangential classes, or image queries and search.
+  \item Topic models also used for social networks and recommendation engines. Our method adds image features to those models.
   \item Compare with other algorithms
   \end{itemize}
 \end{frame}
@@ -197,12 +197,14 @@
   \begin{itemize}
   \item Questions?
   \end{itemize}
-\end
+\end{frame}
 
 \section{References}
 \begin{frame}[t,allowframebreaks]{}
 \frametitle{References}
+{\small
 \printbibliography
+\par}
 \end{frame}
 
 \end{document}
