@@ -108,9 +108,30 @@
 \end{frame}
 
 
-\section{Multimodal}
 \begin{frame}
   \frametitle{Multimodal Documents}
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{assets/wiki_farm.pdf}
+  \end{center}
+             
+  \begin{itemize}
+  \item \emph{We want to learn a topic model using text and images jointly.}
+  \item Images and text complement each other.
+  \item Captions aren't the whole story: cows in political contexts.
+  \end{itemize}
+             
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gaussian Topic Models with CNNs}
+  \begin{center}
+    \includegraphics[width=\textwidth]{gtm_cnn.pdf}
+    \begin{itemize}
+    \item Topics are (mixtures of) Gaussians.
+    \item Words are latent vectors $\lambda_v \in \mathbb{R}^{D_W}$ using Bayesian word2vec.
+    \item Images are latent vectors $v_{in} \in \mathbb{R}^{D_I}$ where $v_{ni} \sim \mathcal{N}(M \text{cnn}(I_{ni} ; \Omega))$ with $\Omega$ CNN parameters, $M$ mapping to word vector space, and $\text{cnn}$ feature representation output by CNN.
+    \end{itemize}
+  \end{center}
 \end{frame}
 
 \begin{frame}
