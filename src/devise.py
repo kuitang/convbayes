@@ -132,31 +132,35 @@ def run_devise(image_vecs, image_labels, word_vecs, n_epochs, checkpoint_file, i
     
     # Initialize M
 #    m_flat = np.random.randn(WORD_DIM * IMAGE_DIM)    
-    m_flat = np.zeros(WORD_DIM * IMAGE_DIM)
+#    m_flat = np.zeros(WORD_DIM * IMAGE_DIM)
+    m_flat = np.randn(WORD_DIM * IMAGE_DIM)
     
     # Beware momentum, as it can cause nonconvergence.
     devise_args = make_minibatch_iterator(image_vecs, image_labels, word_vecs, n_minibatch=1)
 #    opt = climin.RmsProp(m_flat, devise_loss_one_sample, step_rate=1e-2, decay=0.9, args=devise_args)    
-    opt = climin.RmsProp(m_flat, devise_loss_one_sample, step_rate=1e-3, decay=0.9, args=devise_args)    
+    opt = climin.RmsProp(m_flat, devise_loss_one_sample, step_rate=1e-5, decay=0.9, args=devise_args)
 #    opt = climin.RmsProp(m_flat, devise_loss_one_sample, step_rate=1e-2, decay=0.9, momentum=0.9, args=devise_args)
 #    opt = climin.GradientDescent(m_flat, devise_loss_one_sample, step_rate=0.01, momentum=.95, args=devise_args)
 
     old_m_flat = np.copy(m_flat)
     
+    last_validation_loss = np.nan
+
     for info in opt:
         # No validation set yet
         if info["n_iter"] % iters_per_eval == 0:
             dm = np.linalg.norm(m_flat - old_m_flat, 1)
 
-            if dm < dm.thresh:
-                print "Optimization converged at %d iters: dm < %g." % (info["n_iters"], dm)
+            if dm < dm_thresh:
+                print("Optimization converged at %d iters: dm < %g." % (info["n_iters"], dm))
                 return (M, info)
 
             old_m_flat = np.copy(m_flat)
-            print("Iter %d, dM (1-norm) = %g, validation loss = %g" % (info["n_iter"], dm, validation_loss(m_flat, image_vecs, image_labels, word_vecs, validation_inds)))   
+            last_validation_loss = validation_loss(m_flat, image_vecs, image_labels, word_vecs, validation_inds)
+            print("Iter %d, dM (1-norm) = %g, validation loss = %g" % (info["n_iter"], dm, last_validation_loss))
 
         if info["n_iter"] % iters_per_checkpoint == 0:
-            save.save(checkpoint_file, info=info, m_flat=m_flat)
+            save.save(checkpoint_file, info=info, m_flat=m_flat, last_validation_loss=last_validation_loss)
 
         if info["n_iter"] == n_iters:
             M = np.reshape(m_flat, (WORD_DIM, IMAGE_DIM))

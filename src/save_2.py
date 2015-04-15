@@ -13,9 +13,3 @@ def load(filename):
     with open(filename, 'rb') as f:
         return pickle.load(f)
 
-# http://stackoverflow.com/questions/11305790/pickle-incompatability-of-numpy-arrays-between-python-2-and-3
-def load2(filename):
-    """Load a Python 2 pickle file."""
-    with open(filename, 'rb') as f:
-        return pickle.load(f, encoding="latin1")
-
