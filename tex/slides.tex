@@ -218,14 +218,50 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Gaussian LDA Model} 
+  \frametitle{Gaussian LDA Model}
+  The model assumes a large dictionary of ``concepts'', which are Gaussian clusters in semantic space. A topic is a mixture of these concepts, and each vector $x_{dn}$ (word or image) is described by a mixture of topics. The generative process is as follows:
+  \begin{itemize}
+    \item For $k = 1, \ldots, K$ (for each topic):
+      \begin{itemize}
+        \item Draw $\beta_k \sim \text{Dir}(\alpha)$
+        \item Draw $\lambda_k \sim \text{Gamma}(10^{-6}, 10^{-6})$
+        \item Draw $\mu_k \sim \cal{N}(0, \diag(\tau))$
+      \end{itemize}
+    \item For $d = 1, \ldots, D$ (for each document):
+      \item Draw $\theta_d \sim \text{Dir}(\gamma)$
+      \item For $n = 1, \ldots, N_d$ (for each word in document):
+      \begin{itemize}
+        \item Draw $z_{dn} \sim \text{Mult}(\theta_{dn})$
+        \item Draw $c_{dn} \sim \text{Mult}(\beta_{z_{dn}})$
+        \item Draw $x_{dn} \sim \cal{N}(\mu_{c_{dn}}, \diag(\tau_{c_{dn}})$
+      \end{itemize}
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Gaussian LDA Results (Synthetic Data)}
+  \frametitle{Gaussian LDA Synthetic Problem}
+  \begin{center}
+    \includegraphics[height=0.2\textheight]{assets/plot.pdf}\\
+    \includegraphics[height=0.2\textheight]{assets/true_topics.pdf}\\
+    \includegraphics[height=0.2\textheight]{assets/true_document_dictionary.pdf}
+  \end{center}
   \begin{itemize}
+    {\tiny
     \item Implemented variational message passing \citep{Winn05} and stochastic variational inference using the BayesPy \citep{Luttinen14} package. 
-    \item 
+    \item Generate 5 Gaussian clusters (top), 3 topics consisting of mixtures of these clusters (mid) and documents as a mixture of topics.
+    }
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gaussian LDA Synthetic Problem}
+  \begin{center}
+    \includegraphics[height=0.2\textheight]{assets/remapped_recovered_betas.pdf}\\
+    \includegraphics[height=0.2\textheight]{assets/remapped_recovered_thetas.pdf}
+  \end{center}
+  \begin{itemize}
+    \item Recovered essentially the same parameters we used to generate data.
+    \item Algorithm works and is efficient. Next step: run on Wikipedia data.
   \end{itemize}
 \end{frame}
 
