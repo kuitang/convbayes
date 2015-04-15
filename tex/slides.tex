@@ -203,14 +203,28 @@
 
 \begin{frame}
   \frametitle{Data}
+  \begin{itemize}
+  \item Imagenet's 1.3 million training images over 1000 classes
+  \item Wikipedia pages for each of the 1000 classes
+  \item Synthetic data
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Extraction of AlexNet Features}
+  \begin{itemize}
+  \item Hacked BVLC's Caffe's predifined Caffenet model (found in Model Zoo)
+  \item Extracted layer after the final rectified linear unit
+  \item Ran on entire Imagenet
 \end{frame}
 
 \begin{frame}
   \frametitle{Baseline LDA Results}
+  \begin{itemize}
+  \item Extracted and clearned Wikipedia pages for Imagenet synsets (928 found)
+  \item Cleaned and stemmed words, only included those in Google News Corpus
+  \item Ran LDA, implemented in gensim, over corpus with 20 topics
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
