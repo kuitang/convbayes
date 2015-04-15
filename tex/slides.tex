@@ -137,12 +137,23 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Why Do We Want to Do This?}
+  \begin{itemize}
+  \item Constructing an unsupervised, non-discrimantive, model
+  \item Difficult to measure performance \citep{Wallach09a}
+  \item Unspervised data can lead to better vector construction
+  \item "...in general capture some distributional syntatic and semantic information." \citep{Socher13a}
+  \item Can this lead to a semantic understanding of multimodal data?
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Aligning Image and Word Vectors}
   \begin{itemize}
     \item Image vectors $v_{ni}$ are 4096 dimensional CNN representation layer, prior to fully connected classification layers.
     \item Represent high-level semantic information about image.
     \item Word vectors $w_{dn}$ are {100, 300, 500, 1000} dimensional outputs of word2vec.
-    \item Privilege word vector space as the privileged space (because more words in data), map image vectors to word vectors via $M \in \mathbb{R}^{300 \times 4096}$, following the DeVISE method of \citet{Frome13}.
+    \item Privilege word vector space as the privileged space (more words in data), map image vectors to word vectors via $M \in \mathbb{R}^{300 \times 4096}$, following the DeVISE method of \citet{Frome13}.
     \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
     \item Instead of summing all $y' \neq y$, randomly pick a $y'$ which violates the margin.
   \end{itemize}
@@ -174,18 +185,8 @@
   \frametitle{Pre-trained Approximation}
   \begin{itemize}
     \item In practice, training AlexNet is very expensive.
-   
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Why Do We Want to Do This?}
-  \begin{itemize}
-  \item Constructing an unsupervised, non-discrimantive, model
-  \item Difficult to measure performance \citep{Wallach09a}
-  \item Unspervised data can lead to better vector construction
-  \item "...in general capture some distributional syntatic and semantic information." \citep{Socher13a}
-  \item Can this lead to a semantic understanding of multimodal data?
+    \item word2vec accuracy improves with size of training corpus. Large, high quality corpora not publicly accessible.
+    \item For now, we use pretrained image and word vectors and learn the other parameters of the model.
   \end{itemize}
 \end{frame}
 
@@ -204,47 +205,52 @@
 \begin{frame}
   \frametitle{Data}
   \begin{itemize}
-  \item Imagenet's 1.3 million training images over 1000 classes
-  \item Wikipedia pages for each of the 1000 classes
-  \item Synthetic data
+    \item Imagenet's 1.3 million training images over 1000 classes
+    \item Wikipedia pages for each of the 1000 classes
+    \item Synthetic data
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Extraction of AlexNet Features}
   \begin{itemize}
-  \item Hacked BVLC's Caffe's predifined Caffenet model (found in Model Zoo)
-  \item Extracted layer after the final rectified linear unit
-  \item Ran on entire Imagenet
+    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
+    \item Extracted layer after the final rectified linear unit
+    \item Ran on entire Imagenet
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Baseline LDA Results}
   \begin{itemize}
-  \item Extracted and clearned Wikipedia pages for Imagenet synsets (928 found)
-  \item Cleaned and stemmed words, only included those in Google News Corpus
-  \item Ran LDA, implemented in gensim, over corpus with the following results:
-  \item Model 1:
-  \item 20  Topics, Perplexity: 194.5
-  \item Topic 1: drill, cream, song, album, shower
-  \item Topic 2: bird, speci, water, nest, egg
-  \item Topic 3: state, school, citi, public, new
-  \item Topic 4: car, oper, system, engine, use
-  \item Topic 5: speci, male, female, anim, it 
-  \item Model 2:
-  \item 100 Topics, Perplexity: 259.0
-  \item Topic 1: toaster, ipod, lipstick, mailbox, holstein
-  \item Topic 2: speci, plant, fruit, food, seed
-  \item Topic 3: pattern, giant, towel, taylor, box
-  \item Topic 4: web, toolkit, widget, mod, oar
-  \item Topic 5: valley, tractor, pipe, river, hitch
-  \item Model 3:
-  \item 500 Topics, Perplexity: >>1,000,000
-  \item Topic 1: platypus, kite, use, speci, male
-  \item Topic 2: bald, speci, use, hummingbird, jellyfish
-  \item Topic 3: goldfish, gila, fish, may, it
-  \item Topic 4: coat, rain, germ, pool, slug
-  \item Topic 5: ostrich, leatherback, water, nest, sea
+    \item Extracted and cleaned Wikipedia pages for Imagenet synsets (928 found), stemmed words, kept those in pre-trained word2vec model.
+    \item Ran LDA (gensim's implementation)with the following results:
+    \begin{itemize}
+      \item 20  Topics, Perplexity: \textbf{194.5}
+      \item Topic 1: drill, cream, song, album, shower
+      \item Topic 2: bird, speci, water, nest, egg
+      \item Topic 3: state, school, citi, public, new
+      \item Topic 4: car, oper, system, engine, use
+      \item Topic 5: speci, male, female, anim, it 
+    \end{itemize}
+    \item Model 2:
+    \begin{itemize}
+      \item 100 Topics, Perplexity: 259.0
+      \item Topic 1: toaster, ipod, lipstick, mailbox, holstein
+      \item Topic 2: speci, plant, fruit, food, seed
+      \item Topic 3: pattern, giant, towel, taylor, box
+      \item Topic 4: web, toolkit, widget, mod, oar
+      \item Topic 5: valley, tractor, pipe, river, hitch
+    \end{itemize}
+%    \item Model 3:
+%    \begin{itemize}
+%      \item 500 Topics, Perplexity: >>1,000,000
+%      \item Topic 1: platypus, kite, use, speci, male
+%      \item Topic 2: bald, speci, use, hummingbird, jellyfish
+%      \item Topic 3: goldfish, gila, fish, may, it
+%      \item Topic 4: coat, rain, germ, pool, slug
+%      \item Topic 5: ostrich, leatherback, water, nest, sea
+%    \end{itemize}
   \end{itemize}
 \end{frame}
 
@@ -255,11 +261,11 @@
   \item Compute Resources
   \item Data processing bugs
   \end{itemize}
-\end{itemize}
-
-\begin{frame}
-  \frametitle{DeVISE Re-Implementation Results (Synthetic Data)}
 \end{frame}
+
+%\begin{frame}
+%  \frametitle{DeVISE Re-Implementation Results (Synthetic Data)}
+%\end{frame}
 
 \begin{frame}
   \frametitle{Gaussian LDA Model}
