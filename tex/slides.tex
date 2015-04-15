@@ -78,7 +78,7 @@
 \author{Kui Tang and Sameer Lal}
 \institute{Columbia University}
 
-\date{18 February 2015}
+\date{15 April 2015}
 
 \begin{document}
 
@@ -137,6 +137,18 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{Aligning Image and Word Vectors}
+  \begin{itemize}
+    \item Image vectors $v_{ni}$ are 4096 dimensional CNN representation layer, prior to fully connected classification layers.
+    \item Represent high-level semantic information about image.
+    \item Word vectors $w_{dn}$ are {100, 300, 500, 1000} dimensional outputs of word2vec.
+    \item Privilege word vector space as the privileged space (because more words in data), map image vectors to word vectors via $M \in \mathbb{R}^{300 \times 4096}$, following the DeVISE method of \citet{Frome13}.
+    \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
+    \item Instead of summing all $y' \neq y$, randomly pick a $y'$ which violates the margin.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
   \frametitle{Variational Bayesian EM}
   To learn latent variable models, maximize the \emph{marginal likelihood}
   \[
@@ -156,6 +168,14 @@
     E step is variational Bayesian inference \citep{WangC13, Ranganath14}. M step is learning (updating) a CNN with objective
     \par}
   \[ \min_\Omega \sum_\ell L(y_\ell ; \text{CNN}_y(x_\ell ; \Omega)) + \frac{1}{2\sigma^2} \sum_{di} E_{q(v_{di}|\phi^(t))} \left[ (v_{di} - \text{CNN}_x(x_{di} ; \Omega))^2 \right] \]
+\end{frame}
+
+\begin{frame}
+  \frametitle{Pre-trained Approximation}
+  \begin{itemize}
+    \item In practice, training AlexNet is very expensive.
+   
+  \end{itemize}
 \end{frame}
 
 \begin{frame}
@@ -182,14 +202,27 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Implementation and Applications}
-  \begin{itemize}
-  \item Image and text modalities: corpa with images, annotated images, images with captions
-  \item Code EM algorithm with pretrained Caffe model and custom objective, compare with performing SGD on CNN and variational parameters jointly
-  \item Explore other applications: modeling sub-topics, generalization to tangential classes, or image queries and search.
-  \item Topic models also used for social networks and recommendation engines. Our method adds image features to those models.
-  \item Compare with other algorithms
-  \end{itemize}
+  \frametitle{Data}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Extraction of AlexNet Features}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Baseline LDA Results}
+\end{frame}
+
+\begin{frame}
+  \frametitle{DeVISE Re-Implementation Results (Synthetic Data)}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gaussian LDA Model (Synthetic Data)}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Gaussian LDA Results}
 \end{frame}
 
 \begin{frame}
