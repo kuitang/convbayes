@@ -92,18 +92,27 @@
       \begin{enumerate}
         \item Proposed joint model
         \item Actual layer-wise model.
+        \item Data
       \end{enumerate}
     \item Image-word alignment model (DeViSE) \citep{Frome13}.
+      \begin{enumerate}
+        \item Results
+        \item Demo
+      \end{enumerate}
     \item Mixture of Gaussian topic model (original work).
     \begin{enumerate}
+      \item Comparison to baseline LDA
       \item Text training
       \item Text + image training. 
-      \item Comparison to baseline LDA
+      \item Demo
     \end{enumerate}
     \item Conclusions + future work.
   \end{enumerate}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Review Topic Models and Multimodal Embeddings.}
+\end{frame}
 
 \begin{frame}
   \frametitle{Topic Models}
@@ -126,10 +135,6 @@
   \item A model is our hypothesis for how data are generated.
   \item We \emph{condition} on observations to update our hypothesis.
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Review Topic Models and Multimodal Embeddings.}
 \end{frame}
 
 \begin{frame}
@@ -199,7 +204,40 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Image-word alignment model.}
+  \frametitle{Data}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Data}
+  \begin{itemize}
+  \item Imagenet's 1.3 million training images over 1000 classes
+  \item Wikipedia pages for each of the 1000 classes
+  \item Used Google's Word2Vec pretrained word vectors from the Google News Corpus.
+	This corpus had 10 billion words, and generated 3 million word vectors.
+  \item Synthetic data
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Extraction of AlexNet Features}
+  \begin{itemize}
+    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
+    \item Extracted layer after the final rectified linear unit
+    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
+    \item Ran on entire Imagenet
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Image Vectorization API}
+  \begin{itemize}
+    \item TODO
+    \item BTW most groups only did this! [Make sure to remove before presentation.]
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Image-word alignment model ($M$).}
 \end{frame}
 
 \begin{frame}
@@ -228,24 +266,16 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Data}
-  \begin{itemize}
-  \item Imagenet's 1.3 million training images over 1000 classes
-  \item Wikipedia pages for each of the 1000 classes
-  \item Used Google's Word2Vec pretrained word vectors from the Google News Corpus.
-	This corpus had 10 billion words, and generated 3 million word vectors.
-  \item Synthetic data
-  \end{itemize}
+  \frametitle{Results}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Extraction of AlexNet Features}
-  \begin{itemize}
-    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
-    \item Extracted layer after the final rectified linear unit
-    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
-    \item Ran on entire Imagenet
-  \end{itemize}
+  \frametitle{Demo}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Comparison to Baseline LDA}
 \end{frame}
 
 \begin{frame}
@@ -420,6 +450,14 @@ lava\_flows eruptions Kilauea\_Volcano}\tabularnewline
         
   \end{itemize}
 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mixture of Gaussians Topic Model Results --- Text + Images}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Demo}
 \end{frame}
 
 \begin{frame}
