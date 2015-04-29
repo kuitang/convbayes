@@ -2,7 +2,7 @@ LATEX = pdflatex
 #LATEX_FLAGS = -shell-escape -interaction=batchmode
 LATEX_FLAGS = -shell-escape 
 
-all: proposal.pdf proposal_slides.pdf slides.pdf
+all: proposal.pdf proposal_slides.pdf slides.pdf assets/stagewise_model.pdf
 
 gtm_cnn.pdf: gtm_cnn.py daft_init.py
 	python $^
