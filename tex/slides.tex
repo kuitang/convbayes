@@ -101,7 +101,7 @@
       \end{enumerate}
     \item Mixture of Gaussian topic model (original work).
     \begin{enumerate}
-      \item Comparison to baseline LDA
+%      \item Comparison to baseline LDA
       \item Text training
       \item Text + image training. 
       \item Demo
@@ -214,7 +214,7 @@
   \item Wikipedia pages for each of the 1000 classes
   \item Used Google's Word2Vec pretrained word vectors from the Google News Corpus.
 	This corpus had 10 billion words, and generated 3 million word vectors.
-  \item Synthetic data
+%  \item Synthetic data
   \end{itemize}
 \end{frame}
 
@@ -261,48 +261,72 @@
   \frametitle{Results}
 \end{frame}
 
+% \makeimgslide{title}{synset}{basename}
+\newcommand{\makeimgslide}[3]{
+\begin{frame}
+  \frametitle{#1}
+
+  {\tiny \textbf{``#2'' word vector neighbors}: \input{assets/#3_word_nbrs.tex} \par}
+  \begin{center}
+    \includegraphics[height=0.6\textheight]{assets/#3.JPEG}
+  \end{center}
+  {\tiny \textbf{$Mv_{\text{above}}$ neighbors}: \input{assets/#3_img_nbrs.tex} \par}
+\end{frame}
+}
+
+\makeimgslide{Strawberries in a kitchen}{strawberry}{n07745940_9425}
+\makeimgslide{Strawberries in cereal}{strawberry}{n07745940_5896}
+\makeimgslide{Strawberries in a bowl}{strawberry}{n07745940_6479}
+\makeimgslide{Volcano erupting}{volcano}{n09472597_7394}
+\makeimgslide{Volcano behind promontory}{volcano}{n09472597_38883}
+\makeimgslide{Volcano behind wooded hills}{volcano}{n09472597_22727}
+\makeimgslide{Corn and many other foods}{corn}{n12144580_5931}
+\makeimgslide{Corn, brown kernels}{corn}{n12144580_31450}
+\makeimgslide{Acorn and oak leaves}{acorns}{n12267677_18343}
+\makeimgslide{Acorn on brown ground}{acorns}{n12267677_2662}
+
 \begin{frame}
   \frametitle{Demo}
 \end{frame}
 
 
-\begin{frame}
-  \frametitle{Comparison to Baseline LDA}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Baseline LDA Results}
-  \begin{itemize}
-    \item Extracted and cleaned Wikipedia pages for Imagenet synsets (928 found), stemmed words, kept those in pre-trained word2vec model.
-    \item Ran LDA (gensim's implementation)with the following results:
-    \begin{itemize}
-      \item 20  Topics, Perplexity: \textbf{194.5}
-      \item Topic 1: drill, cream, song, album, shower
-      \item Topic 2: bird, speci, water, nest, egg
-      \item Topic 3: state, school, citi, public, new
-      \item Topic 4: car, oper, system, engine, use
-      \item Topic 5: speci, male, female, anim, it 
-    \end{itemize}
-    \item Model 2:
-    \begin{itemize}
-      \item 100 Topics, Perplexity: 259.0
-      \item Topic 1: toaster, ipod, lipstick, mailbox, holstein
-      \item Topic 2: speci, plant, fruit, food, seed
-      \item Topic 3: pattern, giant, towel, taylor, box
-      \item Topic 4: web, toolkit, widget, mod, oar
-      \item Topic 5: valley, tractor, pipe, river, hitch
-    \end{itemize}
-%    \item Model 3:
+%\begin{frame}
+%  \frametitle{Comparison to Baseline LDA}
+%\end{frame}
+%
+%\begin{frame}
+%  \frametitle{Baseline LDA Results}
+%  \begin{itemize}
+%    \item Extracted and cleaned Wikipedia pages for Imagenet synsets (928 found), stemmed words, kept those in pre-trained word2vec model.
+%    \item Ran LDA (gensim's implementation)with the following results:
 %    \begin{itemize}
-%      \item 500 Topics, Perplexity: >>1,000,000
-%      \item Topic 1: platypus, kite, use, speci, male
-%      \item Topic 2: bald, speci, use, hummingbird, jellyfish
-%      \item Topic 3: goldfish, gila, fish, may, it
-%      \item Topic 4: coat, rain, germ, pool, slug
-%      \item Topic 5: ostrich, leatherback, water, nest, sea
+%      \item 20  Topics, Perplexity: \textbf{194.5}
+%      \item Topic 1: drill, cream, song, album, shower
+%      \item Topic 2: bird, speci, water, nest, egg
+%      \item Topic 3: state, school, citi, public, new
+%      \item Topic 4: car, oper, system, engine, use
+%      \item Topic 5: speci, male, female, anim, it 
 %    \end{itemize}
-  \end{itemize}
-\end{frame}
+%    \item Model 2:
+%    \begin{itemize}
+%      \item 100 Topics, Perplexity: 259.0
+%      \item Topic 1: toaster, ipod, lipstick, mailbox, holstein
+%      \item Topic 2: speci, plant, fruit, food, seed
+%      \item Topic 3: pattern, giant, towel, taylor, box
+%      \item Topic 4: web, toolkit, widget, mod, oar
+%      \item Topic 5: valley, tractor, pipe, river, hitch
+%    \end{itemize}
+%%    \item Model 3:
+%%    \begin{itemize}
+%%      \item 500 Topics, Perplexity: >>1,000,000
+%%      \item Topic 1: platypus, kite, use, speci, male
+%%      \item Topic 2: bald, speci, use, hummingbird, jellyfish
+%%      \item Topic 3: goldfish, gila, fish, may, it
+%%      \item Topic 4: coat, rain, germ, pool, slug
+%%      \item Topic 5: ostrich, leatherback, water, nest, sea
+%%    \end{itemize}
+%  \end{itemize}
+%\end{frame}
 
 %\begin{frame}
 %  \frametitle{DeVISE Re-Implementation Results (Synthetic Data)}
@@ -344,7 +368,7 @@
     {\tiny
     \item Implemented variational message passing \citep{Winn05} and stochastic variational inference using the BayesPy \citep{Luttinen14} package. 
     \item Generate 5 Gaussian clusters (top), 3 topics consisting of mixtures of these clusters (mid) and documents as a mixture of topics.
-    }
+    \par}
   \end{itemize}
 \end{frame}
 
@@ -379,7 +403,7 @@
       \item \textbf{Geography}: east west south north southeast southwest above signs united people regions areas levels states folk properties places sites locations cities
       \item \textbf{Natural resources}: water temperature cold heat temperatures areas regions properties places locations cities towns parts sites natural\_gas electricity gasoline gas fuel electric
       \item \textbf{Music}: game mother folk culture traditions cultural strings vibrato pizzicato trombone instrument Mozart\_concerto orchestra oboe flute cello harpsichord clarinet cellist soprano\_saxophone 
-      }
+      \par}
     \end{itemize}
   \end{itemize}
 \end{frame}
@@ -459,10 +483,10 @@ lava\_flows eruptions Kilauea\_Volcano}\tabularnewline
     \begin{itemize}
       \item Reimplemented DeViSE in CUDA; wrapped into a fast test-time API.
       \item Derived and fit \emph{mixture of Gaussian topic models} (MoGTA), a novel model that can be fit with standard techniques with intriguing properties on pre-trained word vectors.
-      \item Demonstrated multimodal inference, modeling vectors for words and images simultaneously.
     \end{itemize}
     \item We have much work to do to make this a proper probabilistic model:
     \begin{itemize}
+      \item Demonstrate multimodal inference, modeling vectors for words and images simultaneously.
       \item Improve Bayeisan word2vec to be competitive with non-Bayesian versions.
       \item Join Bayesian word2vec with MoGTA to form one joint model.
       \item Fine-tune image vector updates (variational Bayesian EM).
