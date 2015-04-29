@@ -220,16 +220,22 @@
 
 \begin{frame}
   \frametitle{Extraction of AlexNet Features}
-  \begin{itemize}
-    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
-    \item Extracted layer after the final rectified linear unit
-    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
-    \item Ran on entire Imagenet
-  \end{itemize}
+  \begin{center}
+    \includegraphics[height=0.9\textheight]{assets/CaffeNetFeatures.pdf}
+  \end{center}
+%  \begin{itemize}
+%    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
+%    \item Extracted layer after the final rectified linear unit
+%    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
+%    \item Ran on entire Imagenet
+%  \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Image Vectorization API}
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/CaffeNetAPI.pdf}
+  \end{center}
   \begin{itemize}
     \item TODO
     \item BTW most groups only did this! [Make sure to remove before presentation.]
