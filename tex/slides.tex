@@ -12,6 +12,7 @@
 \usepackage{algorithmicx}
 \usepackage{algpseudocode}
 \usepackage{xcolor}
+\usepackage{tabularx}
 
 \usepackage{graphicx}
 \DeclareMathOperator{\conv}{conv}
@@ -91,18 +92,27 @@
       \begin{enumerate}
         \item Proposed joint model
         \item Actual layer-wise model.
+        \item Data
       \end{enumerate}
     \item Image-word alignment model (DeViSE) \citep{Frome13}.
+      \begin{enumerate}
+        \item Results
+        \item Demo
+      \end{enumerate}
     \item Mixture of Gaussian topic model (original work).
     \begin{enumerate}
+      \item Comparison to baseline LDA
       \item Text training
       \item Text + image training. 
-      \item Comparison to baseline LDA
+      \item Demo
     \end{enumerate}
     \item Conclusions + future work.
   \end{enumerate}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Review Topic Models and Multimodal Embeddings.}
+\end{frame}
 
 \begin{frame}
   \frametitle{Topic Models}
@@ -125,10 +135,6 @@
   \item A model is our hypothesis for how data are generated.
   \item We \emph{condition} on observations to update our hypothesis.
   \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Review Topic Models and Multimodal Embeddings.}
 \end{frame}
 
 \begin{frame}
@@ -198,32 +204,7 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{Image-word alignment model.}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Transform Raw Images to Word Vectors}
-  \begin{itemize}
-    \item Image vectors $v_{ni}$ are 4096 dimensional CNN representation layer, prior to fully connected classification layers.
-    \item Represent high-level semantic information about image.
-    \item Word vectors $w_{dn}$ are {100, 300, 500, 1000} dimensional outputs of word2vec.
-    \item Privilege word vector space as the privileged space (more words in data), map image vectors to word vectors via $M \in \mathbb{R}^{300 \times 4096}$, following the DeVISE method of \citet{Frome13}.
-    \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
-    \item Instead of summing all $y' \neq y$, randomly pick a $y'$ which violates the margin.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Related Work}
-  \begin{center}
-    \includegraphics[width=\textwidth]{assets/devise.pdf}
-  \end{center}
-
-  \begin{itemize}
-    \item Use Deep Boltzmann Machines \citep{Srivastava14}
-    \item Semi-supervised learning for effective generalization from smaller data sets \citep{Kingma14b}
-    \item Deep Visual-Semantic Embedding Model (DeViSE), use both unannotated text and trained image data for classification \citep{Frome13}
-  \end{itemize}
+  \frametitle{Data}
 \end{frame}
 
 \begin{frame}
@@ -239,12 +220,54 @@
 
 \begin{frame}
   \frametitle{Extraction of AlexNet Features}
+  \begin{center}
+    \includegraphics[height=0.9\textheight]{assets/CaffeNetFeatures.pdf}
+  \end{center}
+%  \begin{itemize}
+%    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
+%    \item Extracted layer after the final rectified linear unit
+%    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
+%    \item Ran on entire Imagenet
+%  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Image Vectorization API}
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/CaffeNetAPI.pdf}
+  \end{center}
   \begin{itemize}
-    \item Hacked BVLC's Caffe's predefined Caffenet model (found in Model Zoo)
-    \item Extracted layer after the final rectified linear unit
-    \item TODO: EXPLAIN WHY THIS IS IMPORTANT; ADD A DIAGRAM.
-    \item Ran on entire Imagenet
+    \item TODO
+    \item BTW most groups only did this! [Make sure to remove before presentation.]
   \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Image-word alignment model ($M$).}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Transform Raw Images to Word Vectors}
+  \begin{center}
+    \includegraphics[width=\textwidth]{assets/devise.pdf}
+  \end{center}
+  \begin{itemize}
+    \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
+    \item Instead of summing all $y' \neq y$, randomly iterate $y'$ and return first example violating the margin.
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Results}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Demo}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Comparison to Baseline LDA}
 \end{frame}
 
 \begin{frame}
@@ -349,31 +372,84 @@
   \end{center}
 
   \begin{itemize}
-    \item Batch variational inference on 100 docs, 133,866 words; took several hours.
-    \item Selected topics:
+    \item Batch variational inference on 100 docs, 133,866 words.
+    \item Selected topics (words from Google News corpus, 3 million word vocabulary.)
       \begin{itemize}
-      \item \emph{Geography}: east west south north southeast southwest above signs united people regions areas levels states folk properties places sites locations cities
-      \item \emph{Natural resources}: water temperature cold heat temperatures areas regions properties places locations cities towns parts sites natural_gas electricity gasoline gas fuel electric
-      \item \emph{Music}: game mother folk culture traditions cultural strings vibrato pizzicato trombone instrument Mozart_concerto orchestra oboe flute cello harpsichord clarinet cellist soprano_saxophone 
+      {\tiny
+      \item \textbf{Geography}: east west south north southeast southwest above signs united people regions areas levels states folk properties places sites locations cities
+      \item \textbf{Natural resources}: water temperature cold heat temperatures areas regions properties places locations cities towns parts sites natural\_gas electricity gasoline gas fuel electric
+      \item \textbf{Music}: game mother folk culture traditions cultural strings vibrato pizzicato trombone instrument Mozart\_concerto orchestra oboe flute cello harpsichord clarinet cellist soprano\_saxophone 
+      }
     \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Example topic and cluster breakdown}
+  \frametitle{Example topic and cluster breakdown 1/2}
   \includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_tsne.pdf}
   \includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_probs.pdf}
 
-  TABLE GOES HERE
+  \begin{tabularx}{\textwidth}{|c|X|}
+\hline 
+{\tiny{}Cluster} & {\tiny{}Words}\tabularnewline
+\hline 
+{\tiny{}18} & {\tiny{}\textbf{[Saltwater]} shoreline ocean coastline nearshore\_reefs sandy\_shorelines
+coastal\_waters shallow\_reefs tidal\_creek shallow\_waters mud\_flats
+sea tidal\_inlet pier\_pilings underwater reef shoreward abyssal\_plain
+inter\_tidal shifting\_sandbars sandy\_bottomed }\tabularnewline
+\hline 
+{\tiny{}25} & {\tiny{}\textbf{[Freshwater]} water ice surface green porpoise\_vaults surficial\_aquifer
+rainwater Floridan\_aquifer radar\_deflectors wa\_ter absorbs\_carbon\_dioxide
+bermed absorbs\_sunlight bugs\_wiggling Mosquitoes\_breed overflowing\_septic\_tanks
+mild\_dishwashing\_liquid reverse\_osmosis\_filtration hyper\_saline
+secondary\_clarifier }\tabularnewline
+\hline 
+  \end{tabularx}
 
 \end{frame}
 
 \begin{frame}
-  \frametitle{Properties of Gaussian LDA Model}
+  \frametitle{Example topic and cluster breakdown 1/2}
+
+\begin{tabularx}{\textwidth}{|c|X|}
+\hline 
+{\tiny{}Cluster} & {\tiny{}Highest Probability Words}\tabularnewline
+\hline 
+{\tiny{}38} & {\tiny{}\textbf{[Chemicals]} hydrous calcium\_oxide cyclohexane inorganic\_salts calcium\_sulphate
+fluorocarbons Sodium\_cyanide silicate\_rocks Nitric\_acid chemically\_reactive
+calcium\_carbonates magnesium\_silicate outgas raffinate potassium\_salts
+bacterial\_decomposition methane trihalomethanes\_THMs element\_boron
+Sulphur\_dioxide }\tabularnewline
+\hline 
+{\tiny{}66} & {\tiny{}\textbf{[Volcanoes]} coral reefs reef corals coral\_reefs ocean volcanoes sea coral\_reef
+volcanic islands lava volcano oceans undersea\_volcanoes oceanic ocean\_basins
+lava\_flows eruptions Kilauea\_Volcano}\tabularnewline
+\hline 
+\end{tabularx}
+  
+\end{frame}
+
+\begin{frame}
+  \frametitle{Properties of Mixture of Gaussian LDA Model}
   \begin{itemize}
     \item Captures both local (word2vec neighborhoods, context) semantic and syntactic similarity, as well as broader topical similarity.
+    \item Mixture of Gaussian crucial: components of topic can be \emph{far} in semantic space. Existing global semantic models, e.g. paragraph vectors \citep{Le14q} still require locality in semantic space.
+    \item Semantic space representation permits \emph{explaining} topics using a much larger corpus than the training corpus.
+    \begin{itemize}
+      \item Generalize across corpora.
+      \item Get good qualitative results even with small data.
+    \end{itemize}
+        
   \end{itemize}
 
+\end{frame}
+
+\begin{frame}
+  \frametitle{Mixture of Gaussians Topic Model Results --- Text + Images}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Demo}
 \end{frame}
 
 \begin{frame}
