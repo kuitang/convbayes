@@ -211,9 +211,12 @@
   \frametitle{Data}
   \begin{itemize}
   \item Imagenet's 1.3 million training images over 1000 classes
+  \item Only used 10% for training currently (100,000 image vectors)
   \item Wikipedia pages for each of the 1000 classes
+  \item In reality, far less, due to synsets not being in pretrained Word2Vec
   \item Used Google's Word2Vec pretrained word vectors from the Google News Corpus.
 	This corpus had 10 billion words, and generated 3 million word vectors.
+  \item Only running on a subset of the data
 %  \item Synthetic data
   \end{itemize}
 \end{frame}
@@ -237,8 +240,11 @@
     \includegraphics[width=\textwidth]{assets/CaffeNetAPI.pdf}
   \end{center}
   \begin{itemize}
-    \item TODO
-    \item BTW most groups only did this! [Make sure to remove before presentation.]
+    \item API utilizes pretrained CaffeNet Model 
+    \item Simple python command for getting classification and image features 
+    \item Example call: image_vector, softmax = transform('image_url')
+    \item Can expand to images on local (client) machine
+    \item Very slow!
   \end{itemize}
 \end{frame}
 
