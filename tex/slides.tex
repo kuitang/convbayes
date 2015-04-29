@@ -242,26 +242,12 @@
 
 \begin{frame}
   \frametitle{Transform Raw Images to Word Vectors}
-  \begin{itemize}
-    \item Image vectors $v_{ni}$ are 4096 dimensional CNN representation layer, prior to fully connected classification layers.
-    \item Represent high-level semantic information about image.
-    \item Word vectors $w_{dn}$ are {100, 300, 500, 1000} dimensional outputs of word2vec.
-    \item Privilege word vector space as the privileged space (more words in data), map image vectors to word vectors via $M \in \mathbb{R}^{300 \times 4096}$, following the DeVISE method of \citet{Frome13}.
-    \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
-    \item Instead of summing all $y' \neq y$, randomly pick a $y'$ which violates the margin.
-  \end{itemize}
-\end{frame}
-
-\begin{frame}
-  \frametitle{Related Work}
   \begin{center}
     \includegraphics[width=\textwidth]{assets/devise.pdf}
   \end{center}
-
   \begin{itemize}
-    \item Use Deep Boltzmann Machines \citep{Srivastava14}
-    \item Semi-supervised learning for effective generalization from smaller data sets \citep{Kingma14b}
-    \item Deep Visual-Semantic Embedding Model (DeViSE), use both unannotated text and trained image data for classification \citep{Frome13}
+    \item Learn $M$ by minimizing a ranking loss: $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$ where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data.
+    \item Instead of summing all $y' \neq y$, randomly iterate $y'$ and return first example violating the margin.
   \end{itemize}
 \end{frame}
 
