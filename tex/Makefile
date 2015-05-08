@@ -34,4 +34,4 @@ slides.pdf: slides.tex gtm_cnn.pdf
 .PHONY: clean
 
 clean:
-	rm *.pdf *.aux *.bbl *.bcf *.blg *.log *.nav *.run.xml *.snm *.toc
+	rm *.pdf *.aux *.bbl *.bcf *.blg *.log *.nav *.run.xml *.snm *.toc *.out
