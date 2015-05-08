@@ -88,14 +88,70 @@ Some work has used topic models in unsupervised settings for images. \cite{Fritz
 \paragraph{Hybrid neural network and HMM models.}
 A simpler problem related to our work is to combine output from a feedforward neural network with a Hidden Markov model. Several authors have proposed schemes tuned for a variety of tasks \cite{Trentin01}. The approach closest to ours is that of \cite{Bengio92}, which derives gradient updates to a feedforward neural network based on the maximum-likelihood objective. Our work shares the same approach to optimize the neural network parameters to maximize the likelihood of the overall probabilistic model.
 
-\section{Model}
+\section{Models}
+\subsection{Mapping Image Vectors to Word Vectors}
+
+\subsection{Gaussian Topic Model}
+The model assumes a large dictionary of ``concepts'', which are Gaussian clusters in semantic space. A topic is a mixture of these concepts, and each vector $x_{dn}$ (word or image) is described by a mixture of topics. The generative process is as follows:
+\begin{itemize}
+\item For $k = 1, \ldots, K$ (for each topic):
+  \begin{itemize}
+    \item Draw $\beta_k \sim \mbox{Dir}(\alpha)$
+    \item Draw $\lambda_k \sim \mbox{Gamma}(10^{-6}, 10^{-6})$
+    \item Draw $\mu_k \sim \mathcal{N}(0, \diag(\tau))$
+  \end{itemize}
+\item For $d = 1, \ldots, D$ (for each document):
+  \item Draw $\theta_d \sim \mbox{Dir}(\gamma)$
+  \item For $n = 1, \ldots, N_d$ (for each word in document):
+  \begin{itemize}
+    \item Draw $z_{dn} \sim \mbox{Mult}(\theta_{dn})$
+    \item Draw $c_{dn} \sim \mbox{Mult}(\beta_{z_{dn}})$
+    \item Draw $x_{dn} \sim \mathcal{N}(\mu_{c_{dn}}, \diag(\tau_{c_{dn}})$
+  \end{itemize}
+\end{itemize}
 
 \section{Results}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{assets/gtm100_mu_tsne.pdf}
+\includegraphics[width=0.5\textwidth]{assets/gtm100_topic_heatmap.pdf}
+\caption{\emph{Top:} Locations of means of 100 concept clusters ($t$-SNE). \emph{Bottom:} Distribution of topics (rows) over clusters (columns).}
+\end{figure}
+
 \begin{figure}
 \centering
 \includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_tsne.pdf}
 \includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_probs.pdf}
-\caption{\emph{Top:} Locations of means of significant ($\geq 5\%$ posterior probability) clusters for the ``natural resources'' topic. \emph{Bottom:} Distribution over clusters for the ``Natural resources'' topic.}
+
+\begin{tabularx}{\columnwidth}{|c|X|}
+\hline 
+{\tiny{}Cluster} & {\tiny{}Words}\tabularnewline
+\hline 
+{\tiny{}18} & {\tiny{}\textbf{[Saltwater]} shoreline ocean coastline nearshore\_reefs sandy\_shorelines
+coastal\_waters shallow\_reefs tidal\_creek shallow\_waters mud\_flats
+sea tidal\_inlet pier\_pilings underwater reef shoreward abyssal\_plain
+inter\_tidal shifting\_sandbars sandy\_bottomed }\tabularnewline
+\hline 
+{\tiny{}25} & {\tiny{}\textbf{[Freshwater]} water ice surface green porpoise\_vaults surficial\_aquifer
+rainwater Floridan\_aquifer radar\_deflectors wa\_ter absorbs\_carbon\_dioxide
+bermed absorbs\_sunlight bugs\_wiggling Mosquitoes\_breed overflowing\_septic\_tanks
+mild\_dishwashing\_liquid reverse\_osmosis\_filtration hyper\_saline
+secondary\_clarifier }\tabularnewline
+\hline 
+{\tiny{}38} & {\tiny{}\textbf{[Chemicals]} hydrous calcium\_oxide cyclohexane inorganic\_salts calcium\_sulphate
+fluorocarbons Sodium\_cyanide silicate\_rocks Nitric\_acid chemically\_reactive
+calcium\_carbonates magnesium\_silicate outgas raffinate potassium\_salts
+bacterial\_decomposition methane trihalomethanes\_THMs element\_boron
+Sulphur\_dioxide }\tabularnewline
+\hline 
+{\tiny{}66} & {\tiny{}\textbf{[Volcanoes]} coral reefs reef corals coral\_reefs ocean volcanoes sea coral\_reef
+volcanic islands lava volcano oceans undersea\_volcanoes oceanic ocean\_basins
+lava\_flows eruptions Kilauea\_Volcano}\tabularnewline
+\hline 
+\end{tabularx}
+
+\caption{\emph{Top:} Locations of means of significant ($\geq 5\%$ posterior probability) concept clusters for the ``natural resources'' topic ($t$-SNE). \emph{Bottom:} Distribution over concept clusters for the ``Natural resources'' topic.}
 \end{figure}
 
 \section{Discussion}
