@@ -115,7 +115,7 @@ The model assumes a large dictionary of ``concepts'', which are Gaussian cluster
 
 \subsection{Data}
 \label{sec:data}
-Image vector data was extracted using the popular image processing library Caffe (SHOULD CITE). The library's pretrained CaffeNet convolutional neural net was 
+Image vector data was extracted using the popular deep learning image processing library Caffe (SHOULD CITE). The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} (SHOULD CITE) mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply ommitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment.
 
 \subsection{Image-Word Alignment Results}
 
