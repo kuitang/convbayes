@@ -70,7 +70,7 @@ The abstract goes here.
 \end{abstract}
 
 \section{Introduction}
-\paragraph{Introduction}One of the popular tasks in Machine Learning and Computer Vision has been object detection. The ability for computers to recognize patterns in image data has many applications in robotics, health care, manufacturing, and defense. For many years, traditional computer vision algorithms were capable of achieving mediocre performance in object recogntion challenges. Recently though, the use of convolutional neural networks has led researchers to achieve significantly higher levels of performance. This breakthrough has been met with a rapid adoption of deep learning in many other domains. Neural nets have been used in natural language processing, speech recognition, facial detection, and reinforcement learning. Having developed a powerful tool for supervised learning across multiple modalities of data, a new challenge arises in performing learning in this multimodal space. Given the ability to extract rich features via neural networks and the abundance of unsupervised multimodal data, research focus has shifted to building models which could learn semantic information from these natural data sets such as news articles or annotated images. By extracting features from this space, statistical models could gain a much deeper understanding of objects and concepts. 
+One of the popular tasks in Machine Learning and Computer Vision has been object detection. The ability for computers to recognize patterns in image data has many applications in robotics, health care, manufacturing, and defense. For many years, traditional computer vision algorithms were capable of achieving mediocre performance in object recogntion challenges. Recently though, the use of convolutional neural networks has led researchers to achieve significantly higher levels of performance. This breakthrough has been met with a rapid adoption of deep learning in many other domains. Neural nets have been used in natural language processing, speech recognition, facial detection, and reinforcement learning. Having developed a powerful tool for supervised learning across multiple modalities of data, a new challenge arises in performing learning in this multimodal space. Given the ability to extract rich features via neural networks and the abundance of unsupervised multimodal data, research focus has shifted to building models which could learn semantic information from these natural data sets such as news articles or annotated images. By extracting features from this space, statistical models could gain a much deeper understanding of objects and concepts. 
 
 \section{Related Work}
 \paragraph{Neural multimodal models.}
@@ -85,6 +85,11 @@ Some work has used topic models in unsupervised settings for images. \cite{Fritz
 A simpler problem related to our work is to combine output from a feedforward neural network with a Hidden Markov model. Several authors have proposed schemes tuned for a variety of tasks \cite{Trentin01}. The approach closest to ours is that of \cite{Bengio92}, which derives gradient updates to a feedforward neural network based on the maximum-likelihood objective. Our work shares the same approach to optimize the neural network parameters to maximize the likelihood of the overall probabilistic model.
 
 \section{Models}
+\begin{figure}
+\centering
+\includegraphics[width=\columnwidth]{assets/stagewise_model.pdf}
+\caption{Diagram of stagewise multimodal model of this work. Black boxes denote standard pretrained models. Round entries are intermediate representations, and green boxes denote components we trained.}
+\end{figure}
 \subsection{Mapping Image Vectors to Word Vectors}
 
 \subsection{Gaussian Topic Model}
@@ -108,17 +113,24 @@ The model assumes a large dictionary of ``concepts'', which are Gaussian cluster
 
 \section{Results}
 
+\subsection{Data}
+\label{sec:data}
+
+\subsection{Image-Word Alignment Results}
+
+\subsection{Mixture of Gaussian Topic Model Results}
+
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{assets/gtm100_mu_tsne.pdf}
-\includegraphics[width=0.5\textwidth]{assets/gtm100_topic_heatmap.pdf}
+\includegraphics[width=\columnwidth]{assets/gtm100_mu_tsne.pdf}
+\includegraphics[width=\columnwidth]{assets/gtm100_topic_heatmap.pdf}
 \caption{\emph{Top:} Locations of means of 100 concept clusters ($t$-SNE). \emph{Bottom:} Distribution of topics (rows) over clusters (columns).}
 \end{figure}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_tsne.pdf}
-\includegraphics[width=0.5\textwidth]{assets/gtm100_topic8_probs.pdf}
+\includegraphics[width=\columnwidth]{assets/gtm100_topic8_tsne.pdf}
+\includegraphics[width=\columnwidth]{assets/gtm100_topic8_probs.pdf}
 
 \begin{tabularx}{\columnwidth}{|c|X|}
 \hline 
@@ -150,49 +162,27 @@ lava\_flows eruptions Kilauea\_Volcano}\tabularnewline
 \caption{\emph{Top:} Locations of means of significant ($\geq 5\%$ posterior probability) concept clusters for the ``natural resources'' topic ($t$-SNE). \emph{Bottom:} Distribution over concept clusters for the ``Natural resources'' topic.}
 \end{figure}
 
+\begin{table}
+\centering
+\begin{tabular}{|c|c|c|}
+\cline{2-3} 
+\multicolumn{1}{c|}{} & LDA & MoG-LDA\tabularnewline
+\hline 
+Test log-likelihood & -11.915 & \tabularnewline
+\hline 
+Test perplexity & 3860.5 & \tabularnewline
+\hline 
+Direct coherence &  & \tabularnewline
+\hline 
+Indirect coherence &  & \tabularnewline
+\hline 
+\end{tabular}
+\caption{Quantitative results comparing mixture of Gaussian topic model (with pretrained word vectors) with ordinary LDA. All log-likelihood and perplexity results were obtained by training on last 100 documents and testing on first 100 as described in Sec.~\ref{sec:data}. The topic coherence metrics are described in \cite{Lau14} using code supplied by the author.}
+\end{table}
+
 \section{Discussion}
 
-\subsection{Footnotes}
-
-{\bf Footnotes}: Put footnotes at the bottom of the page and use 9
-points text. They may be numbered or referred to by asterisks or other
-symbols.\footnote{This is how a footnote should appear.} Footnotes
-should be separated from the text by a line.\footnote{Note the line
-separating the footnotes from the text.}
-
-\subsection{Graphics}
-
-{\bf Illustrations}: Place figures, tables, and photographs in the
-paper near where they are first discussed, rather than at the end, if
-possible.  Wide illustrations may run across both columns.  Color
-illustrations are discouraged, unless you have verified that  
-they will be understandable when printed in black ink.
-
-{\bf Captions}: Provide a caption for every illustration; number each one
-sequentially in the form:  ``Figure 1. Caption of the Figure.'' ``Table 1.
-Caption of the Table.''  Type the captions of the figures and 
-tables below the body, using 11 point text.
-
-
-\section{XML conversion and supported \LaTeX\ packages}
-
-Following ACL 2014 we will also we will attempt to automatically convert 
-your \LaTeX\ source files to publish papers in machine-readable 
-XML with semantic markup in the ACL Anthology, in addition to the 
-traditional PDF format.  This will allow us to create, over the next 
-few years, a growing corpus of scientific text for our own future research, 
-and picks up on recent initiatives on converting ACL papers from earlier 
-years to XML. 
-
-We encourage you to submit a ZIP file of your \LaTeX\ sources along
-with the camera-ready version of your paper. We will then convert them
-to XML automatically, using the LaTeXML tool
-(\url{http://dlmf.nist.gov/LaTeXML}). LaTeXML has \emph{bindings} for
-a number of \LaTeX\ packages, including the ACL 2015 stylefile. These
-bindings allow LaTeXML to render the commands from these packages
-correctly in XML. For best results, we encourage you to use the
-packages that are officially supported by LaTeXML, listed at
-\url{http://dlmf.nist.gov/LaTeXML/manual/included.bindings}
+\section{Conclusions and Future Work}
 
 \section*{Acknowledgments}
 
