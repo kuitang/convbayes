@@ -67,7 +67,7 @@
 \maketitle
 
 \begin{abstract}
-Recent work has shown promising results in obtaining low-dimensional semantic embeddings of discrete (text) or high-dimensional (image) data. So far, these embeddings have only been applied to fine-grained discriminative tasks such as image captioning or analogy completion. Embedding such vectors in higher order statistical models is an open problem with applications to information retrieval, document summarization, recommendations, and other areas. This work proposes a novel topic model to work in this multimodal space where all document elements (words and images) are represented as word vectors. Vectors are clustered into a mixture of Gaussians, each representing a latent ``concept.'' Topics are latent mixtures of Gaussians, and each document is a mixture of topics. Pre-trained state-of-the-art neural networks are used to obtain feature mappings for words and images. A linear mapping between image and word vectors are learned to put all data into the same space. We present qualitative and quantitative results showing improvement against baseline LDA and conclude and propose future work.
+Recent work has shown promising results in obtaining low-dimensional semantic embeddings of discrete (text) or high-dimensional (image) data. So far, these embeddings have only been applied to fine-grained discriminative tasks such as image captioning or analogy completion. Embedding such vectors in higher order statistical models is an open problem with applications to information retrieval, document summarization, recommendations, and other areas. This work proposes a novel topic model to work in this multimodal space where all document elements (words and images) are represented as word vectors and topics are latent mixtures of Gaussians. A linear mapping between image and word vectors are learned to put all data into the same space. We present qualitative and quantitative results showing improvement against baseline LDA and conclude and propose future work.
 \end{abstract}
 
 \section{Introduction}
@@ -122,7 +122,7 @@ The model assumes a large dictionary of ``concepts'', which are Gaussian cluster
   \end{itemize}
 \end{itemize}
 
-As this model is conjugate-exponential family we perform posterior inference using variational message passing (VMP)~\cite{Winn05} using the BayesPy package~\cite{Luttinen14}.
+As this model is conjugate-exponential family we perform posterior inference using variational message passing (VMP)~\cite{Winn05} using the BayesPy package~\cite{Luttinen14}. Hyperparameters are left at fixed values, which are low enough to induce sparsity.
 
 We attempted to implement stochastic variational inference~\cite{Hoffman13} for this model, but were unable to converge to high-quality local optima. We hypothesize this is due to model mis-specification (details deferred to Sec.~\ref{sec:misspec}). In short, mixture models benefit from asymmetric initializations, particularly when we seek sparse posteriors (as in this case, where we want topics to put zero probability mass on most concepts). However, our mis-specified likelihood results in numerical underflow for asymmetric initializations. The batch VMP algorithm is able to overcome a symmetric initialization, but not so the stochastic algorithms.
 
@@ -237,13 +237,14 @@ Arguably, a more useful metric for topic models is \emph{coherence} \cite{Chang0
 \label{sec:misspec}
 We encountered some problems using the pretrained \emph{word2vec} model (obtained from the authors' website of~\cite{Mikolov13a}). The vectors were normalized, but the Gaussian likelihood does not generate unit-norm vectors, particularly when the mean is close to an existing word vectors and therefore has norm close to one (as we observe occured).
 
-This resulted in unrealisticallyl small posterior variances, which caused the training log-likelihood to be very positive and the test log-likelihood to be very negative. Thus the concepts (Gaussian likelihoods) overfit the training data even though the higher level variables (topics and document assignments) did not.
+This resulted in unrealistically small posterior variances, which caused the training log-likelihood to be very positive and the test log-likelihood to be very negative. Thus the concepts (Gaussian likelihoods) overfit the training data even though the higher level variables (topics and document assignments) did not.
 
 We propose to ameliorate this problem by fitting mixture of von-Mises Fisher distributions to correct model the unit-norm vectors~\cite{Dhillon03b}, or to use alternative pre-trained models~\cite{Pennington14} which are not unit-normed.
 
-\section{Discussion}
+\section{Discussion and Future Works}
+While word vectors capture local, fine-grained notions of semantics, topic models capture semantics at the document and corpus level. Combining the two representations permits us to factorize corpus semantics, for example, in explaining a topic on natural resources in terms of concepts of freshwater, saltwater, chemicals, and volcanoes. The mixture of Gaussian representation allows the grouping of latent factors which are far apart in semantic space, but which at the document level are in fact correlated. This departs from existing work in higher-order semantic models, which are restricted to the sentence~\cite{Socher13a} or paragraph~\cite{Le14q} level. These models are also limited to representing large swathes of text as single vectors.
 
-\section{Conclusions and Future Work}
+We anticipate that mixture modeling will be essential to capture higher order notions of semantics. As there is no reason to restrict ourselves to one latent mixture layer, we propose to model word vectors as deep exponential families~\cite{Ranganath14b} so that similarity can be measured as vector space distances but at many levels of granularity. We are also currently working on a fully Bayesian treatment of skip-gram models of text as the bottom layer to this model. We can also extend our model to obtain vector embeddings of equations, data tables~\cite{Pinto03}, and diagrams, in order to search and analyze scientific literature.
 
 \section*{Acknowledgments}
 
