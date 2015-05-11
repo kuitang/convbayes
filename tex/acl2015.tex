@@ -83,7 +83,7 @@ Several authors have applied topic modeling to visual or joint text and visual d
 Some work has used topic models in unsupervised settings for images. \cite{Fritz08} trains LDA to detect object categories, but they use only gradient histogram representations. \cite{Cao07} proposed a model for unsupervised object detection, but they only used quantized SIFT features.
 
 \paragraph{Hybrid neural network and HMM models.}
-A simpler problem related to our work is to combine output from a feedforward neural network with a Hidden Markov model. Several authors have proposed schemes tuned for a variety of tasks \cite{Trentin01}. The approach closest to ours is that of \cite{Bengio92}, which derives gradient updates to a feedforward neural network based on the maximum-likelihood objective. Our work shares the same approach to optimize the neural network parameters to maximize the likelihood of the overall probabilistic model.
+A simpler problem related to our work is to combine output from a feedforward neural network with a Hidden Markov model. Several authors have proposed schemes tuned for a variety of tasks \cite{Trentin01}. The approach closest to ours is that of \cite{Bengio92}, which derives gradient updates to a feedforward neural network based on the maximum-likelihood objective. 
 
 \section{Models}
 \begin{figure}
@@ -92,13 +92,13 @@ A simpler problem related to our work is to combine output from a feedforward ne
 \caption{\label{fig:stagewise} Diagram of stagewise multimodal model of this work. Black boxes denote standard pretrained models. Round entries are intermediate representations, and green boxes denote components we trained.}
 \end{figure}
 
-Figure~\ref{fig:stagewise} outlines the model presented in this work, which can be viewed as a stagewise approximation to a fully Bayesian treatment of the problem. We first obtain pre-trained models which take words or images as inputs and output rich continuous features representations (details in Sec.~\ref{:sec:data}). We replicate the approach in \cite{Frome13} to learna linear map to transform image vectors to word vectors by minizing a ranking loss
+Figure~\ref{fig:stagewise} outlines the model presented in this work, which can be viewed as a stagewise approximation to a fully Bayesian treatment of the problem. We first obtain pre-trained models which take words or images as inputs and output rich continuous features representations (details in Sec.~\ref{:sec:data}). We replicate the approach in \cite{Frome13} to learn a linear map to transform image vectors to word vectors by minizing a ranking loss
 
 $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$
 
 where $v$ is image vector, $y$ is image label, $w$ is word vector. Sum this term over all $(v, y)$ pairs in labeled data. Instead of summing all $y' \neq y$, we randomly iterate over $y'$ and return first example violating the margin.
 
-Having obtained a trained $M$ matrix, we now take each image in our corpus and run it through the image model (AlexNet) and multiply it by $M$ to obtain a transformed word vector for that image.
+Having obtained a trained $M$ matrix, we now take each image in our corpus and run it through the image model (CaffeNet) and multiply it by $M$ to obtain a transformed word vector for that image.
 
 Now that all components of the data have been transformed to a common feature representation (word vectors), we are ready to fit the mixture of Gaussians topic model.
 
@@ -184,7 +184,7 @@ Avg. observed coherence & $0.00509$ & $0.01666$ \tabularnewline
 Avg. word intrusion & $0.60$ & $0.30$ \tabularnewline
 \hline 
 \end{tabular}
-\caption{\label{fig:quant} Quantitative results comparing mixture of Gaussian LDA (with pretrained word vectors) with ordinary LDA. All log-likelihood and perplexity results were obtained by training on last 100 documents and testing on first 100 as described in Sec.~\ref{sec:data}. The topic coherence metrics are described in \cite{Lau14} using code supplied by the author. Note that test log-likelihood for mixture of Gaussian LDA is positive because it the likelihood is a continuous density, and thus not directly comparable, and also due to mis-specification (see Sec.~\ref{sec:misspec}).}
+\caption{\label{fig:quant} Quantitative results comparing mixture of Gaussian LDA (with pretrained word vectors) with ordinary LDA. All log-likelihood and perplexity results were obtained by training on last 100 documents and testing on first 100 as described in Sec.~\ref{sec:data}. The topic coherence metrics are described in \cite{Lau14} using code supplied by the author. Note that test log-likelihood for mixture of Gaussian LDA is positive because the likelihood is a continuous density, and thus not directly comparable, and also due to mis-specification (see Sec.~\ref{sec:misspec}).}
 \end{table}
 
 [WRITE ABOUT HOW WE SELECTED WIKIPEDIA.]
@@ -193,7 +193,7 @@ We compare results between LDA~\cite{Blei03} and our method (batch training) tra
 
 \subsection{Data}
 \label{sec:data}
-Image vector data was extracted using the popular deep learning image processing library Caffe \cite{Jia14}. The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} \cite{Mikolov13a} mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply ommitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment.
+Image vector data was extracted using the popular deep learning image processing library Caffe \cite{Jia14}. The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} \cite{Mikolov13a} mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply ommitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment. For the LDA and MoG-LDA, the first and last 100 documents in the document set were used for test and training sets respectively.
 
 \subsection{Quantitative Evaluation}
 
