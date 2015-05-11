@@ -67,11 +67,13 @@
 \maketitle
 
 \begin{abstract}
-Recent work has shown promising results in obtaining low-dimensional semantic embeddings of discrete (text) or high-dimensional (image) data. So far, these embeddings have only been applied to fine-grained discriminative tasks such as image captioning or analogy completion. Embedding such vectors in higher order statistical models is an open problem with applications to information retrieval, document summarization, recommendations, and other areas. This work proposes a novel topic model to work in this multimodal space where all document elements (words and images) are represented as word vectors and topics are latent mixtures of Gaussians. A linear mapping between image and word vectors are learned to put all data into the same space. We present qualitative and quantitative results showing improvement against baseline LDA and conclude and propose future work.
+Recent work has shown promising results in obtaining low-dimensional semantic embeddings of discrete (text) or high-dimensional (image) data. So far, these embeddings have only been applied to fine-grained discriminative tasks such as image captioning or analogy completion. Embedding such vectors in higher order statistical models is an open problem with applications in information retrieval, document summarization, recommendations, and other areas. We propose a novel topic model to work in this multimodal space where all document elements (words and images) are represented as word vectors and topics are latent mixtures of Gaussians. A linear mapping between image and word vectors is learned to put all data into the same space. We present qualitative and quantitative results showing improvement against baseline LDA and conclude and propose future work.
 \end{abstract}
 
 \section{Introduction}
-One of the popular tasks in Machine Learning and Computer Vision has been object detection. The ability for computers to recognize patterns in image data has many applications in robotics, health care, manufacturing, and defense. For many years, traditional computer vision algorithms were capable of achieving mediocre performance in object recogntion challenges. Recently though, the use of convolutional neural networks has led researchers to achieve significantly higher levels of performance. This breakthrough has been met with a rapid adoption of deep learning in many other domains. Neural nets have been used in natural language processing, speech recognition, facial detection, and reinforcement learning. Having developed a powerful tool for supervised learning across multiple modalities of data, a new challenge arises in performing learning in this multimodal space. Given the ability to extract rich features via neural networks and the abundance of unsupervised multimodal data, research focus has shifted to building models which could learn semantic information from these natural data sets such as news articles or annotated images. By extracting features from this space, statistical models could gain a much deeper understanding of objects and concepts. 
+In recent years, convolutional neural networks have attained state-of-the-art performance in supervised image classification~\cite{Krizhevsky12}. As a side effect, it was discovered that the penultimate layer of these networks capture high quality abstract feature representations of images, which can be repurposed for other tasks~\cite{Frome13}. At the same time, researchers have developed neural models of text~\cite{Bengio06} whereby semantically similar words have higher cosine similiarity, culminating in the skip-gram model~\cite{Mikolov13a}.
+
+Given the ability to extract rich features via neural networks and the abundance of unsupervised multimodal data, research focus has shifted to building models which could learn semantic information from these natural data sets such as news articles or annotated images. By extracting features from this space, statistical models could gain a much deeper understanding of objects and concepts. 
 
 \section{Related Work}
 \paragraph{Neural multimodal models.}
@@ -139,6 +141,7 @@ We attempted to implement stochastic variational inference~\cite{Hoffman13} for 
 \par ball above volleyball team court aircraft ocean cape player atlantic toreflect
 \par used also hot hay cabbage pomegranate blinds food wok may halfsies
 \par flow sound number whistle speed tone jet edge feedback characteristic acknowledges
+\par
 }
 
 \rule{\columnwidth}{1pt}
@@ -154,6 +157,7 @@ We attempted to implement stochastic variational inference~\cite{Hoffman13} for 
 \par puzzle puzzles crossword called time shown found indicates use links 
 \par water cold temperatures temperature heat regions areas cities properties sites 
 \par game mother folk traditions culture cultural saxophone clarinet pizzicato vibraphones 
+\par
 }
 
 \caption{\label{tbl:topics} Most probable words under each topic. \emph{Top:} LDA. \emph{Bottom:} Mixture of Gaussian LDA}
@@ -216,10 +220,8 @@ Avg. observed coherence & $0.00509$ & $0.01666$ \tabularnewline
 Avg. word intrusion & $0.60$ & $0.30$ \tabularnewline
 \hline 
 \end{tabular}
-\caption{\label{fig:quant} Quantitative results comparing mixture of Gaussian LDA (with pretrained word vectors) with ordinary LDA. All log-likelihood and perplexity results were obtained by training on last 100 documents and testing on first 100 as described in Sec.~\ref{sec:data}. The topic coherence metrics are described in \cite{Lau14} using code supplied by the author. Note that test log-likelihood for mixture of Gaussian LDA is positive because the likelihood is a continuous density, and thus not directly comparable, and also due to mis-specification (see Sec.~\ref{sec:misspec}).}
+\caption{\label{tbl:quant} Quantitative results comparing mixture of Gaussian LDA (with pretrained word vectors) with ordinary LDA. All log-likelihood and perplexity results were obtained by training on last 100 documents and testing on first 100 as described in Sec.~\ref{sec:data}. The topic coherence metrics are described in \cite{Lau14} using code supplied by the author. Note that test log-likelihood for mixture of Gaussian LDA is positive because the likelihood is a continuous density, and thus not directly comparable, and also due to mis-specification (see Sec.~\ref{sec:misspec}).}
 \end{table}
-
-[WRITE ABOUT HOW WE SELECTED WIKIPEDIA.]
 
 We compare results between LDA~\cite{Blei03} and our method (batch training) trained over the last 100 documents on our Wikipedia dataset, containing 133,866 words. We set both methods to fit 10 topics. Table~\ref{tbl:topics} shows ten most probable words under each topic for each method. Figure~\ref{fig:gtm-globals} summarizes the mixture of Gaussians learned by our model, while Figure~\ref{fig:gtm-nat-res} zooms in on one particular topic (which we label natural resources) to examine four significant clusters within it. Table~\ref{tbl:quant} report our quantitative results, further discussed in Sec.~\ref{sec:quant}.
 
