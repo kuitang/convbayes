@@ -127,16 +127,37 @@ As this model is conjugate-exponential family we perform posterior inference usi
 We attempted to implement stochastic variational inference~\cite{Hoffman13} for this model, but were unable to converge to high-quality local optima. We hypothesize this is due to model mis-specification (details deferred to Sec.~\ref{sec:misspec}). In short, mixture models benefit from asymmetric initializations, particularly when we seek sparse posteriors (as in this case, where we want topics to put zero probability mass on most concepts). However, our mis-specified likelihood results in numerical underflow for asymmetric initializations. The batch VMP algorithm is able to overcome a symmetric initialization, but not so the stochastic algorithms.
 
 \section{Results}
-\begin{figure}
+\begin{table}
+{\tiny
+\par maize coral bananas banana ear reef reefs also used paper journeyperson
+\par diver hair diving wigs used gas also divers wine water intravitreous
+\par ice also meat cream wool loaf used water new may sesquicentenary
+\par traffic signs light red lights road green signals used signal cooldowns
+\par menu strawberry also music menus may cucumbers strawberries fruit cucumber acccording
+\par water pizza tower towers knot also used pressure new often cribbing
+\par valley mushrooms comics comic also mushroom used species sandman rapeseed lipase
+\par ball above volleyball team court aircraft ocean cape player atlantic toreflect
+\par used also hot hay cabbage pomegranate blinds food wok may halfsies
+\par flow sound number whistle speed tone jet edge feedback characteristic acknowledges
+}
 
-\begin{itemize}
-\end{itemize}
+\rule{\columnwidth}{1pt}
 
-\begin{itemize}
-\end{itemize}
+{\tiny 
+\par wood wool trays stored ovenware dunnage storage containers refrigerator freezable 
+\par called hot folk culture cultural traditions regions areas widely among 
+\par dog dogs bottles bottle refridgerator freezable stored containers fridge dunnage 
+\par diving diver divers dive ball length flow flows speed vibrato 
+\par plants plant red white called ear stalk ears mother healthily 
+\par signs united red white traffic lights light directions signal conditions 
+\par south west east southwest north southeast above signs united people 
+\par puzzle puzzles crossword called time shown found indicates use links 
+\par water cold temperatures temperature heat regions areas cities properties sites 
+\par game mother folk traditions culture cultural saxophone clarinet pizzicato vibraphones 
+}
 
 \caption{\label{tbl:topics} Most probable words under each topic. \emph{Top:} LDA. \emph{Bottom:} Mixture of Gaussian LDA}
-\end{figure}
+\end{table}
 
 \begin{figure}
 \centering
