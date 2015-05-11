@@ -128,6 +128,17 @@ We attempted to implement stochastic variational inference~\cite{Hoffman13} for 
 
 \section{Results}
 \begin{figure}
+
+\begin{itemize}
+\end{itemize}
+
+\begin{itemize}
+\end{itemize}
+
+\caption{\label{tbl:topics} Most probable words under each topic. \emph{Top:} LDA. \emph{Bottom:} Mixture of Gaussian LDA}
+\end{figure}
+
+\begin{figure}
 \centering
 \includegraphics[width=\columnwidth]{assets/gtm100_mu_tsne.pdf}
 \includegraphics[width=\columnwidth]{assets/gtm100_topic_heatmap.pdf}
@@ -189,17 +200,25 @@ Avg. word intrusion & $0.60$ & $0.30$ \tabularnewline
 
 [WRITE ABOUT HOW WE SELECTED WIKIPEDIA.]
 
-We compare results between LDA~\cite{Blei03} and our method (batch training) trained over the last 100 documents on our Wikipedia dataset, containing 133,866 words. We set both methods to fit 10 topics. Table~\ref{tbl:topics} shows ten most probable words under each topic for each method. Figure~\ref{fig:gtm-globals} summarizes the mixture of Gaussians learned by our model, while Figure~\ref{fig:gtm-nat-res} zooms in on one particular topic (which we label natural resources) to examine four significant clusters within it.
+We compare results between LDA~\cite{Blei03} and our method (batch training) trained over the last 100 documents on our Wikipedia dataset, containing 133,866 words. We set both methods to fit 10 topics. Table~\ref{tbl:topics} shows ten most probable words under each topic for each method. Figure~\ref{fig:gtm-globals} summarizes the mixture of Gaussians learned by our model, while Figure~\ref{fig:gtm-nat-res} zooms in on one particular topic (which we label natural resources) to examine four significant clusters within it. Table~\ref{tbl:quant} report our quantitative results, further discussed in Sec.~\ref{sec:quant}.
 
 \subsection{Data}
 \label{sec:data}
 Image vector data was extracted using the popular deep learning image processing library Caffe \cite{Jia14}. The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} \cite{Mikolov13a} mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply ommitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment.
 
 \subsection{Quantitative Evaluation}
+\label{sec:quant}
+As standard practice, we compared both lower bounds of held out log-likelihood and perplexity for the two topic models. For latent variable models trained with VMP, this requires instantiating a new model where global variables have their parameters values fixed to their posterior values while local variables are iteratively updated until convergence, and the variational lower-bound computed by summing each node's contribution.
+
+Arguably, a more useful metric for topic models is \emph{coherence} \cite{Chang09}, an aggregated human judgment of how well the words of a particular topic form a semantically related group. Recent work has shown that metrics for topics computed with the aid of word-word co-occurence counts in a large reference corpus (e.g. Wikipedia) correlate well with human annotations of coherence~\cite{Lau14}. Thus in Table~\ref{tbl:quant}, the ``observed coherence'' row estimates the average across topics of how a human rater would score the topic while the ``word intrusion'' role estimates the fraction of topics on which a human rater would correctly identify the an intruder word. As expected, our model, which leverages pre-trained semantic data, performs better on both metrics.
 
 \subsection{Model Mis-specification:}
 \label{sec:misspec}
-our pretrained word vectors (obtained from the authors' website of~\cite{Mikolov13a}) were normalized, but the Gaussian likelihood does not generate unit-norm vectors, particularly when the mean is close to an existing word vectors and therefore has norm close to one (as we observe occured). 
+We encountered some problems using the pretrained \emph{word2vec} model (obtained from the authors' website of~\cite{Mikolov13a}). The vectors were normalized, but the Gaussian likelihood does not generate unit-norm vectors, particularly when the mean is close to an existing word vectors and therefore has norm close to one (as we observe occured).
+
+This resulted in unrealisticallyl small posterior variances, which caused the training log-likelihood to be very positive and the test log-likelihood to be very negative. Thus the concepts (Gaussian likelihoods) overfit the training data even though the higher level variables (topics and document assignments) did not.
+
+We propose to ameliorate this problem by fitting mixture of von-Mises Fisher distributions to correct model the unit-norm vectors~\cite{Dhillon03b}, or to use alternative pre-trained models~\cite{Pennington14} which are not unit-normed.
 
 \section{Discussion}
 
