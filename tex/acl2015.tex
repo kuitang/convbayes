@@ -71,7 +71,7 @@ Recent work has shown promising results in obtaining low-dimensional semantic em
 \end{abstract}
 
 \section{Introduction}
-In recent years, convolutional neural networks have attained state-of-the-art performance in supervised image classification~\cite{Krizhevsky12}. As a side effect, it was discovered that the penultimate layer of these networks capture high quality abstract feature representations of images, which can be repurposed for other tasks~\cite{Frome13}. At the same time, researchers have developed neural models of text~\cite{Bengio06} whereby semantically similar words have higher cosine similiarity, culminating in the skip-gram model~\cite{Mikolov13a}.
+In recent years, convolutional neural networks have attained state-of-the-art performance in supervised image classification~\cite{Krizhevsky12}. As a side effect, it was discovered that the penultimate layer of these networks capture high quality abstract feature representations of images, which can be repurposed for other tasks~\cite{Frome13}. At the same time, researchers have developed neural models of text~\cite{Bengio06} whereby semantically similar words have higher cosine similarity, culminating in the skip-gram model~\cite{Mikolov13a}.
 
 Given the ability to extract rich features via neural networks and the abundance of unsupervised multimodal data, research focus has shifted to building models which could learn semantic information from these natural data sets such as news articles or annotated images. By extracting features from this space, statistical models could gain a much deeper understanding of objects and concepts. 
 
@@ -94,7 +94,7 @@ A simpler problem related to our work is to combine output from a feedforward ne
 \caption{\label{fig:stagewise} Diagram of stagewise multimodal model of this work. Black boxes denote standard pretrained models. Round entries are intermediate representations, and green boxes denote components we trained.}
 \end{figure}
 
-Figure~\ref{fig:stagewise} outlines the model presented in this work, which can be viewed as a stagewise approximation to a fully Bayesian treatment of the problem. We first obtain pre-trained models which take words or images as inputs and output rich continuous features representations (details in Sec.~\ref{:sec:data}). We replicate the approach in \cite{Frome13} to learn a linear map to transform image vectors to word vectors by minizing a ranking loss
+Figure~\ref{fig:stagewise} outlines the model presented in this work, which can be viewed as a stagewise approximation to a fully Bayesian treatment of the problem. We first obtain pre-trained models which take words or images as inputs and output rich continuous features representations (details in Sec.~\ref{:sec:data}). We replicate the approach in \cite{Frome13} to learn a linear map to transform image vectors to word vectors by minimizing a ranking loss
 
 $$\ell(v, y) = \sum_{y' \neq y} \max \left[0, \lambda - w_{y}^\top M v + w_{y'} ^\top M v \right]$$
 
@@ -131,16 +131,16 @@ We attempted to implement stochastic variational inference~\cite{Hoffman13} for 
 \section{Results}
 \begin{table}
 {\tiny
-\par maize coral bananas banana ear reef reefs also used paper journeyperson
-\par diver hair diving wigs used gas also divers wine water intravitreous
-\par ice also meat cream wool loaf used water new may sesquicentenary
-\par traffic signs light red lights road green signals used signal cooldowns
-\par menu strawberry also music menus may cucumbers strawberries fruit cucumber acccording
-\par water pizza tower towers knot also used pressure new often cribbing
-\par valley mushrooms comics comic also mushroom used species sandman rapeseed lipase
-\par ball above volleyball team court aircraft ocean cape player atlantic toreflect
-\par used also hot hay cabbage pomegranate blinds food wok may halfsies
-\par flow sound number whistle speed tone jet edge feedback characteristic acknowledges
+\par maize coral bananas banana ear reef reefs also used paper
+\par diver hair diving wigs used gas also divers wine water
+\par ice also meat cream wool loaf used water new may
+\par traffic signs light red lights road green signals used signal
+\par menu strawberry also music menus may cucumbers strawberries fruit cucumber
+\par water pizza tower towers knot also used pressure new often
+\par valley mushrooms comics comic also mushroom used species sandman rapeseed
+\par ball above volleyball team court aircraft ocean cape player atlantic
+\par used also hot hay cabbage pomegranate blinds food wok may
+\par flow sound number whistle speed tone jet edge feedback characteristic
 \par
 }
 
@@ -227,17 +227,17 @@ We compare results between LDA~\cite{Blei03} and our method (batch training) tra
 
 \subsection{Data}
 \label{sec:data}
-Image vector data was extracted using the popular deep learning image processing library Caffe \cite{Jia14}. The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} \cite{Mikolov13a} mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply ommitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment. For the LDA and MoG-LDA, the first and last 100 documents in the document set were used for test and training sets respectively.
+Image vector data was extracted using the popular deep learning image processing library Caffe \cite{Jia14}. The library's pretrained \textit{CaffeNet} convolutional neural network was used to classify images. For each image in the training set of the ILSVRC, the output of the final rectified linear unit was recorded. These 4096 dimensional vectors were used in image and word alignment. For word vectors, the first word in each class' synset which existed in the pretrained \textit{word2vec} \cite{Mikolov13a} mapping was used to extract a word vector. The mapping was trained on Google New's corpus of over 10 billion words. To obtain pertinent documents for topic modeling, the raw text of the Wikipedia article for each class' synset was treated as a document. There were several classes that did not have a \textit{word2vec} mapping or valid Wikipedia article and those were simply omitted. In order to have documents with multimodal information, each word in the Wikipedia articles was transformed into \textit{word2vec} vector. Then each article was appended with 10 images that had been mapped to the word vector space (300 dimensional) using the Image-Word alignment. For the LDA and MoG-LDA, the first and last 100 documents in the document set were used for test and training sets respectively.
 
 \subsection{Quantitative Evaluation}
 \label{sec:quant}
 As standard practice, we compared both lower bounds of held out log-likelihood and perplexity for the two topic models. For latent variable models trained with VMP, this requires instantiating a new model where global variables have their parameters values fixed to their posterior values while local variables are iteratively updated until convergence, and the variational lower-bound computed by summing each node's contribution.
 
-Arguably, a more useful metric for topic models is \emph{coherence} \cite{Chang09}, an aggregated human judgment of how well the words of a particular topic form a semantically related group. Recent work has shown that metrics for topics computed with the aid of word-word co-occurence counts in a large reference corpus (e.g. Wikipedia) correlate well with human annotations of coherence~\cite{Lau14}. Thus in Table~\ref{tbl:quant}, the ``observed coherence'' row estimates the average across topics of how a human rater would score the topic while the ``word intrusion'' role estimates the fraction of topics on which a human rater would correctly identify the an intruder word. As expected, our model, which leverages pre-trained semantic data, performs better on both metrics.
+Arguably, a more useful metric for topic models is \emph{coherence} \cite{Chang09}, an aggregated human judgment of how well the words of a particular topic form a semantically related group. Recent work has shown that metrics for topics computed with the aid of word-word co-occurrence counts in a large reference corpus (e.g. Wikipedia) correlate well with human annotations of coherence~\cite{Lau14}. Thus in Table~\ref{tbl:quant}, the ``observed coherence'' row estimates the average across topics of how a human rater would score the topic while the ``word intrusion'' role estimates the fraction of topics on which a human rater would correctly identify the an intruder word. As expected, our model, which leverages pre-trained semantic data, performs better on both metrics.
 
 \subsection{Model Mis-specification:}
 \label{sec:misspec}
-We encountered some problems using the pretrained \emph{word2vec} model (obtained from the authors' website of~\cite{Mikolov13a}). The vectors were normalized, but the Gaussian likelihood does not generate unit-norm vectors, particularly when the mean is close to an existing word vectors and therefore has norm close to one (as we observe occured).
+We encountered some problems using the pretrained \emph{word2vec} model (obtained from the authors' website of~\cite{Mikolov13a}). The vectors were normalized, but the Gaussian likelihood does not generate unit-norm vectors, particularly when the mean is close to an existing word vectors and therefore has norm close to one (as we observe occurred).
 
 This resulted in unrealistically small posterior variances, which caused the training log-likelihood to be very positive and the test log-likelihood to be very negative. Thus the concepts (Gaussian likelihoods) overfit the training data even though the higher level variables (topics and document assignments) did not.
 
