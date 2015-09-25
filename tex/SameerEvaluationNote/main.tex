@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[backend=biber,sorting=none]{biblatex}
+
+\addbibresource{main.bib}
+
+\title{A Topic Model for Words in Embedded Space}
+\author{Sameer Lal}
+\date{September 2015}
+
+\begin{document}
+
+\maketitle
+
+\section{Related Works and Methods of Evaluation}
+The described model allows for both quantitative evaluation against multiple metrics and qualitative analysis regarding semantic implications of topics and ``concepts". Several works have proposed metrics for evaluating topic models based on the coherence of topics and their semantic composition. \cite{Blei} initially used held-out (test) perplexity for defining model performance. Though this metric is good for evaluating general model performance, others have focused on defining the quality of topics themselves. \cite{Mimno} had experts analyze topic construction on abstracts from the National Institute of Health (NIH) and found the most common errors were topics being chained or intruded (erroneous words). They proposed, given the assumption that words of similar concepts appear in the same document, a coherence metric based on topic word-topic word co-occurrence in documents. The issue of evaluating whole topic models versus individual topic coherence is explored by \cite{Newman}. They provide a tool-kit for doing both types of evaluation with different settings for interpretability.\par
+By forming topics in embedded/representational space, there should be evidence of that the model has a deeper understanding of word semantics. There are many similarities to the work done by \cite{Vilnis}, and it would be interesting to explore whether word similarity is improved upon by adjusting this embedded space for the topic modeling task. Another advantage of defining topics as a mixture of Gaussians (concepts), is that additional words can be drawn from the representational space in order to make topics more verbose. Furthermore, flawed topics can be further scrutinized by drawing other words that would be in the topic. Another advantage is that poor topics could be quickly identified by distance of ``concepts" in embedded space (potentially a new metric for topic coherence). \par
+To study the semantic understanding of our model, the relationships of topic and concept spaces can be further probed. \cite{HTM} propose a topic model with hierarchies in order to capture relationships between sub and super topics. Our model can capture this sort of relationship with entailment of the concepts and topics in representation space. Overlap between concepts should theoretically describe similarities, while also delineating identifying boundaries. For example, in our previous work, the topics of fresh water and salt water were extracted from a small set of \texttt{Wikipedia} documents. In our model, ideally, these topics will have overlap in representational space for concepts like water, and be mutually exclusive for spaces describing words like lake and ocean. If this is successful, this sort of analysis can be scaled to several topics. Having an instance, for example, where concepts of king, queen, and prince all overlap in space referring to loyalty or palace, while only king and prince have overlap in space referring to male, would be possibly be an improvement to state-of-the-art word embedding schemes such as \cite{Mikolov} or even \cite{Pennington}, which the model is based upon. A final thought is whether co-occurrence between concepts or topics can be used to create higher level (or more abstract) ``thoughts".
+
+\printbibliography
+
+\end{document}
